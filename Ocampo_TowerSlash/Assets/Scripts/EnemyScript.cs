@@ -14,12 +14,16 @@ public class EnemyScript : MonoBehaviour
 
     [SerializeField] private float _enemyHealth;
     [SerializeField] private float _enemySpeed;
+    [SerializeField] private float _deleteEnemyTimer;
 
     [SerializeField] private SpriteRenderer _arrowRenderer;
     [SerializeField] private List<Sprite> _arrowSprites = new List<Sprite>();
 
     private SwipeDirection _direction = SwipeDirection.Right;
     private ArrowColor _arrowColor;
+
+    //For Yellow Enemies Only
+    private Coroutine _yellowCoroutine;
     private bool _isUndetectedByPlayer = true;
     
 
@@ -32,6 +36,8 @@ public class EnemyScript : MonoBehaviour
         _direction = (SwipeDirection)Random.Range(0, 4);
 
         SetArrowDirections();
+
+        StartCoroutine(TimerScript.Instance.CO_ExecuteInCountdown(DeleteEnemyOffscreen, _deleteEnemyTimer));
     }
 
     public void GetDetectedByPlayer()
@@ -41,13 +47,18 @@ public class EnemyScript : MonoBehaviour
         if (_arrowColor == ArrowColor.Yellow)
         {
             _arrowRenderer.color = Color.green;
-            StopAllCoroutines();
+            StopCoroutine(_yellowCoroutine);
         }
     }
 
-    public void KillEnemy()
+    public void AttackEnemy(SwipeDirection playerSwipe)
     {
-        Destroy(gameObject);
+        Debug.Log(playerSwipe.ToString() + " vs. " + _direction);
+
+        if (playerSwipe == _direction)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Start()
@@ -71,14 +82,15 @@ public class EnemyScript : MonoBehaviour
         {
             case ArrowColor.Red:
 
-                _arrowRenderer.sprite = _arrowSprites[ (int)Mathf.Repeat((int)_direction + 2, 3) ];
+                Debug.Log($"{_direction} vs. {(int)(_direction + 2) % 4}");
+                _arrowRenderer.sprite = _arrowSprites[ ((int)_direction + 2) % 4 ];
                 _arrowRenderer.color = Color.red;
                 break;
 
 
             case ArrowColor.Yellow:
 
-                StartCoroutine(TimerScript.Instance.CO_ExecuteInSecondIntervals(ChangeArrowDirections, 0.5f));
+                _yellowCoroutine = StartCoroutine(TimerScript.Instance.CO_ExecuteInSecondIntervals(ChangeArrowDirections, 0.5f));
 
                 _arrowRenderer.color = Color.yellow;
                 break;
@@ -97,10 +109,14 @@ public class EnemyScript : MonoBehaviour
     private void ChangeArrowDirections()
     {
         
-        _direction = (SwipeDirection) Mathf.Repeat((float)++_direction, 3f);
+        _direction = (SwipeDirection) ((int)++_direction % 4);
         _arrowRenderer.sprite = _arrowSprites[(int)_direction];
         
-        Debug.Log("Changing");
+        //Debug.Log("Changing");
     }
 
+    private void DeleteEnemyOffscreen()
+    {
+        Destroy(gameObject);
+    }
 }

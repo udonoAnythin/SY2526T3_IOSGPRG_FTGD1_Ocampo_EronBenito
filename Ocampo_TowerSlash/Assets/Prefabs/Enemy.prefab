@@ -174,6 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyHealth: 0
   _enemySpeed: 0
+  _deleteEnemyTimer: 7.5
   _arrowRenderer: {fileID: 5484471035908199163}
   _arrowSprites:
   - {fileID: 21300000, guid: b5b0cf9208d68b04884865b77e1774fe, type: 3}

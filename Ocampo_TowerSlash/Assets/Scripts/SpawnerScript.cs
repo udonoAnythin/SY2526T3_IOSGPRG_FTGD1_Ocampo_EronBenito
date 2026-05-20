@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnerScript : Singleton<SpawnerScript>
+public class SpawnerScript : MonoBehaviour
 {
 
     [SerializeField] private GameObject _enemyPrefab;
@@ -11,18 +11,21 @@ public class SpawnerScript : Singleton<SpawnerScript>
 
     private List<EnemyScript> _enemies = new List<EnemyScript>();
 
-    public void RemoveEnemyFromList(EnemyScript enemy)
-    {
-        _enemies.Remove(enemy);
-    }
+    
 
     private void Start()
     {
         StartCoroutine(TimerScript.Instance.CO_ExecuteInSecondIntervals(SpawnEnemy, _spawnInterval));
     }
 
+    private void Update()
+    {
+        RemoveNullEnemiesFromList();
+    }
+
     private void SpawnEnemy()
     {
+        
         GameObject enemy = Instantiate(_enemyPrefab, _spawnLocation.transform.position, Quaternion.identity);
         EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
 
@@ -30,7 +33,22 @@ public class SpawnerScript : Singleton<SpawnerScript>
         _enemies.Add(enemyScript);
     }
 
+    private void RemoveNullEnemiesFromList()
+    {
+        foreach (EnemyScript enemy in _enemies)
+        {
+            if (enemy == null)
+            {
+                RemoveEnemyFromList(enemy);
+                break;
+            }
+        }
+    }
 
+    private void RemoveEnemyFromList(EnemyScript enemy)
+    {
+        _enemies.Remove(enemy);
+    }
 
 
 }

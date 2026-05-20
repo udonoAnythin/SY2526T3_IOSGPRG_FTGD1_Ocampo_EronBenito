@@ -19,11 +19,13 @@ public class TimerScript : Singleton<TimerScript>
 
     public IEnumerator CO_ExecuteInSecondIntervals(UnityAction action, float executeTime)
     {
-
+        
         float currentTime = 0;
 
         while (true)
         {
+            yield return null;
+
             currentTime += Time.deltaTime;
 
             if (currentTime >= executeTime)
@@ -34,7 +36,7 @@ public class TimerScript : Singleton<TimerScript>
 
             }
 
-            yield return new WaitForEndOfFrame();
+            //Debug.Log(currentTime);
 
         }
 
@@ -49,7 +51,7 @@ public class TimerScript : Singleton<TimerScript>
         {
             currentTime += Time.deltaTime;
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
 
         }
 

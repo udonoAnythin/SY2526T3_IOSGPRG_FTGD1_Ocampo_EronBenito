@@ -16,6 +16,7 @@ public class SwipeDetectionScript : MonoBehaviour
 {
 
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private PlayerScript _playerScript;
 
     private InputAction _touchPressAction;
     private InputAction _touchPositionAction;
@@ -57,11 +58,13 @@ public class SwipeDetectionScript : MonoBehaviour
             if (_touchEnd.x < _touchStart.x)
             {
                 Debug.Log("Player Swiped Left");
+                _playerScript.AttackNearestEnemy(SwipeDirection.Left);
 
             }
             else if (_touchEnd.x > _touchStart.x)
             {
                 Debug.Log("Player Swiped Right");
+                _playerScript.AttackNearestEnemy(SwipeDirection.Right);
 
             }
         }
@@ -70,11 +73,12 @@ public class SwipeDetectionScript : MonoBehaviour
             if (_touchEnd.y < _touchStart.y)
             {
                 Debug.Log("Player Swiped Down");
-
+                _playerScript.AttackNearestEnemy(SwipeDirection.Down);
             }
             else if (_touchEnd.y > _touchStart.y)
             {
                 Debug.Log("Player Swiped Up");
+                _playerScript.AttackNearestEnemy(SwipeDirection.Up);
 
             }
         }
