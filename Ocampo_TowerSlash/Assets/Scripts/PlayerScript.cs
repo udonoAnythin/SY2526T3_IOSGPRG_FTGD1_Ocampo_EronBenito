@@ -12,6 +12,8 @@ public class PlayerScript : MonoBehaviour
         if (_enemies.Count > 0)
         {
             _enemies.Peek().AttackEnemy(playerSwipe);
+            //_enemies.Peek().Direction == playerSwipe
+                
         }
     }
 

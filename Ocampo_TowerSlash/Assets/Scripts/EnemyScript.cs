@@ -11,6 +11,10 @@ public enum ArrowColor
 
 public class EnemyScript : MonoBehaviour
 {
+    public SwipeDirection Direction
+    {
+        get => _direction;
+    }
 
     [SerializeField] private float _enemyHealth;
     [SerializeField] private float _enemySpeed;
@@ -26,6 +30,10 @@ public class EnemyScript : MonoBehaviour
     private Coroutine _yellowCoroutine;
     private bool _isUndetectedByPlayer = true;
     
+    private void Update()
+    {
+        Move();
+    }
 
     public void Initialize()
     {
@@ -61,15 +69,6 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        Move();
-    }
 
     private void Move()
     {

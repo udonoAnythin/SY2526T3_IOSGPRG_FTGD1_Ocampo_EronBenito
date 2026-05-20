@@ -6,17 +6,6 @@ using UnityEngine.UI;
 
 public class TimerScript : Singleton<TimerScript>
 {
-
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
-
     public IEnumerator CO_ExecuteInSecondIntervals(UnityAction action, float executeTime)
     {
         
