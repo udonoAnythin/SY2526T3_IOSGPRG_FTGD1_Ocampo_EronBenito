@@ -25,7 +25,30 @@ public class TimerScript : Singleton<TimerScript>
 
             }
 
-            //Debug.Log(currentTime);
+        }
+
+    }
+
+    public IEnumerator CO_ExecuteInRandomIntervals(UnityAction action, float minTime, float maxTime)
+    {
+
+        float currentTime = 0;
+        float timer = Random.Range(minTime, maxTime);
+
+        while (true)
+        {
+            yield return null;
+
+            currentTime += Time.deltaTime;
+
+            if (currentTime >= timer)
+            {
+                action.Invoke();
+
+                currentTime = 0;
+                timer = Random.Range(minTime, maxTime);
+
+            }
 
         }
 
@@ -51,6 +74,28 @@ public class TimerScript : Singleton<TimerScript>
             yield return null;
         }
 
+    }
+
+    public IEnumerator CO_ExecuteDuringTimer(UnityAction action, float duration, UnityAction actionWhenCompleted = null)
+    {
+        float currentTime = 0;
+
+        while (currentTime <= duration)
+        {
+            currentTime += Time.deltaTime;
+
+            action.Invoke();
+
+            yield return null;
+
+        }
+
+        if (actionWhenCompleted != null)
+        {
+            actionWhenCompleted.Invoke();
+
+            yield return null;
+        }
     }
 
 }

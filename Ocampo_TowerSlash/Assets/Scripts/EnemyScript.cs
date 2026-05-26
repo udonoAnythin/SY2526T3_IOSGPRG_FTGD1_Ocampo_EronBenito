@@ -16,20 +16,24 @@ public class EnemyScript : MonoBehaviour
         get => _direction;
     }
 
-    [SerializeField] private float _enemyHealth;
-    [SerializeField] private float _enemySpeed;
-    [SerializeField] private float _deleteEnemyTimer;
+    [SerializeField] private float _enemySpeed = 1;
 
     [SerializeField] private SpriteRenderer _arrowRenderer;
     [SerializeField] private List<Sprite> _arrowSprites = new List<Sprite>();
+    [SerializeField] private GameObject _arrowBackground;
 
     private SwipeDirection _direction = SwipeDirection.Right;
     private ArrowColor _arrowColor;
 
     //For Yellow Enemies Only
     private Coroutine _yellowCoroutine;
-    private bool _isUndetectedByPlayer = true;
-    
+    //private bool _isUndetectedByPlayer = true;
+
+    private void Start()
+    {
+        _arrowBackground.SetActive(false);
+    }
+
     private void Update()
     {
         Move();
@@ -37,20 +41,19 @@ public class EnemyScript : MonoBehaviour
 
     public void Initialize()
     {
-        _enemyHealth = Random.Range(10, 50);
-        _enemySpeed = Random.Range(3, 5);
 
         _arrowColor = (ArrowColor)Random.Range(0, 3);
         _direction = (SwipeDirection)Random.Range(0, 4);
 
         SetArrowDirections();
 
-        StartCoroutine(TimerScript.Instance.CO_ExecuteInCountdown(DeleteEnemyOffscreen, _deleteEnemyTimer));
+        //StartCoroutine(TimerScript.Instance.CO_ExecuteInCountdown(DeleteEnemyOffscreen, _deleteEnemyTimer));
     }
 
     public void GetDetectedByPlayer()
     {
-        _isUndetectedByPlayer = false;
+        //_isUndetectedByPlayer = false;
+        _arrowBackground.SetActive(true);
 
         if (_arrowColor == ArrowColor.Yellow)
         {
@@ -59,14 +62,9 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    public void AttackEnemy(SwipeDirection playerSwipe)
+    public void TakeDamage()
     {
-        Debug.Log(playerSwipe.ToString() + " vs. " + _direction);
-
-        if (playerSwipe == _direction)
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 
 

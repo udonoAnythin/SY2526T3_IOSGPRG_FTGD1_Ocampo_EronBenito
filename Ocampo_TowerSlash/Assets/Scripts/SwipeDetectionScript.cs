@@ -16,7 +16,10 @@ public class SwipeDetectionScript : MonoBehaviour
 {
 
     [SerializeField] private PlayerInput _playerInput;
+
+    [Header("GameObject References")]
     [SerializeField] private PlayerScript _playerScript;
+    [SerializeField] private GroundScript _groundScript;
 
     private InputAction _touchPressAction;
     private InputAction _touchPositionAction;
@@ -83,10 +86,8 @@ public class SwipeDetectionScript : MonoBehaviour
             }
         }
 
-        
-
-        
-
     }
+
+
 
 }
