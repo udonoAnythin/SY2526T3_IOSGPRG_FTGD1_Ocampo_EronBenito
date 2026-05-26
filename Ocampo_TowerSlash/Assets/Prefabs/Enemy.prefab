@@ -257,7 +257,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6034105c9ecefb04ea6eec7921ae6782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySpeed: 2
+  _spawner: {fileID: 0}
+  _enemyBaseSpeed: 2
   _arrowRenderer: {fileID: 5484471035908199163}
   _arrowSprites:
   - {fileID: 21300000, guid: b5b0cf9208d68b04884865b77e1774fe, type: 3}

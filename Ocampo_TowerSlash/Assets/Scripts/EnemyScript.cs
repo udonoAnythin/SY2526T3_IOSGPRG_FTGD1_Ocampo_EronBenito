@@ -16,18 +16,21 @@ public class EnemyScript : MonoBehaviour
         get => _direction;
     }
 
-    [SerializeField] private float _enemySpeed = 1;
+    [Header("Enemy Variables")]
+    [SerializeField] private SpawnerScript _spawner;
+    [SerializeField] private float _enemyBaseSpeed = 1;
 
+    [Header("Arrow Variables")]
     [SerializeField] private SpriteRenderer _arrowRenderer;
     [SerializeField] private List<Sprite> _arrowSprites = new List<Sprite>();
     [SerializeField] private GameObject _arrowBackground;
 
+    private float _enemySpeed;
     private SwipeDirection _direction = SwipeDirection.Right;
     private ArrowColor _arrowColor;
 
     //For Yellow Enemies Only
     private Coroutine _yellowCoroutine;
-    //private bool _isUndetectedByPlayer = true;
 
     private void Start()
     {
@@ -39,13 +42,16 @@ public class EnemyScript : MonoBehaviour
         Move();
     }
 
-    public void Initialize()
+    public void Initialize(SpawnerScript spawner, float speedMultiplier = 1)
     {
+        _spawner = spawner;
 
         _arrowColor = (ArrowColor)Random.Range(0, 3);
         _direction = (SwipeDirection)Random.Range(0, 4);
 
         SetArrowDirections();
+
+        _enemySpeed = _enemyBaseSpeed * speedMultiplier;
 
         //StartCoroutine(TimerScript.Instance.CO_ExecuteInCountdown(DeleteEnemyOffscreen, _deleteEnemyTimer));
     }
@@ -64,9 +70,25 @@ public class EnemyScript : MonoBehaviour
 
     public void TakeDamage()
     {
+        _spawner.RemoveEnemy(this);
+
         Destroy(gameObject);
     }
 
+    public void ChangeSpeed(float multiplier)
+    {
+        _enemySpeed = _enemyBaseSpeed * multiplier;
+
+        if (multiplier == 0 && _arrowColor == ArrowColor.Yellow)
+        {
+            StopCoroutine(_yellowCoroutine);
+        }
+    }
+
+    public void RevertSpeed()
+    {
+        _enemySpeed = _enemyBaseSpeed;
+    }
 
     private void Move()
     {
@@ -112,8 +134,4 @@ public class EnemyScript : MonoBehaviour
         //Debug.Log("Changing");
     }
 
-    private void DeleteEnemyOffscreen()
-    {
-        Destroy(gameObject);
-    }
 }

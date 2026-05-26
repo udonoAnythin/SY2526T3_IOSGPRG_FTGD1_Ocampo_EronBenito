@@ -1,10 +1,48 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerScript : MonoBehaviour
 {
+    public float Lives
+    {
+        get => _lives;
+    }
+
+    public bool IsDashing
+    {
+        get => _isDashing;
+    }
+
+    public UnityEvent PlayerDamaged
+    {
+        get => _playerDamage;
+    }
+
     [SerializeField] private float _lives = 3;
+    [SerializeField] private SwipeDetectionScript _swipeDetectionScript;
+
+    [Header("Events")]
+    [SerializeField] private UnityEvent _playerDamage = new UnityEvent();
+
     private Queue<EnemyScript> _enemies = new Queue<EnemyScript>();
+    private bool _isDashing = false;
+
+    private void OnEnable()
+    {
+        _swipeDetectionScript.SwipedLeft.AddListener(OnSwipeLeft);
+        _swipeDetectionScript.SwipedRight.AddListener(OnSwipeRight);
+        _swipeDetectionScript.SwipedDown.AddListener(OnSwipeDown);
+        _swipeDetectionScript.SwipedUp.AddListener(OnSwipeUp);
+    }
+
+    private void OnDisable()
+    {
+        _swipeDetectionScript.SwipedLeft.RemoveListener(OnSwipeLeft);
+        _swipeDetectionScript.SwipedRight.RemoveListener(OnSwipeRight);
+        _swipeDetectionScript.SwipedDown.RemoveListener(OnSwipeDown);
+        _swipeDetectionScript.SwipedUp.RemoveListener(OnSwipeUp);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -12,9 +50,16 @@ public class PlayerScript : MonoBehaviour
 
         if (enemy != null)
         {
-            enemy.GetDetectedByPlayer();
+            if (_isDashing)
+            {
+                enemy.TakeDamage();
+            }
+            else
+            {
+                enemy.GetDetectedByPlayer();
 
-            _enemies.Enqueue(enemy);
+                _enemies.Enqueue(enemy);
+            }
         }
     }
 
@@ -23,20 +68,27 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.GetComponent<EnemyScript>() == _enemies.Peek())
         {
             //Kill Enemy
-            //EnemyScript enemy = _enemies.Dequeue();
-            //enemy.TakeDamage();
-            Debug.Log("Enemy Exited");
-            _enemies.Dequeue();
+            EnemyScript enemy = _enemies.Dequeue();
+            enemy.TakeDamage();
 
             //Reduce Lives
             TakeDamage();
 
-            //if all lives are lost, kill player
-
         }
     }
 
-    public void AttackNearestEnemy(SwipeDirection playerSwipe)
+    public void SetDash(bool isDashing)
+    {
+        _isDashing = isDashing;
+
+        while (_enemies.Count > 0)
+        {
+            EnemyScript enemy = _enemies.Dequeue();
+            enemy.TakeDamage();
+        }
+    }
+
+    private void AttackNearestEnemy(SwipeDirection playerSwipe)
     {
         if (_enemies.Count > 0)
         {
@@ -51,12 +103,9 @@ public class PlayerScript : MonoBehaviour
             }
             else
             {
-                EnemyScript enemy = _enemies.Dequeue();
-                enemy.TakeDamage();
-
                 TakeDamage();
             }
-                
+
         }
     }
 
@@ -64,10 +113,12 @@ public class PlayerScript : MonoBehaviour
     {
         _lives--;
 
-        if ( _lives <= 0)
-        {
-            //Kill Player
-        }
+        //Invoke the event
+        _playerDamage.Invoke();
+
+        //Clear all in queue for reset
+        _enemies.Clear();
+
     }
 
     private void GainLifeThroughChance()
@@ -77,6 +128,30 @@ public class PlayerScript : MonoBehaviour
         {
             _lives++;
         }
+    }
+
+    private void OnSwipeLeft()
+    {
+        if (_isDashing) return;
+        AttackNearestEnemy(SwipeDirection.Left);
+    }
+
+    private void OnSwipeRight()
+    {
+        if (_isDashing) return;
+        AttackNearestEnemy(SwipeDirection.Right);
+    }
+
+    private void OnSwipeDown()
+    {
+        if (_isDashing) return;
+        AttackNearestEnemy(SwipeDirection.Down);
+    }
+
+    private void OnSwipeUp()
+    {
+        if (_isDashing) return;
+        AttackNearestEnemy(SwipeDirection.Up);
     }
     
 }

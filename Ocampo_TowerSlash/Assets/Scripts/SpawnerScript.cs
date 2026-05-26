@@ -4,29 +4,69 @@ using UnityEngine;
 
 public class SpawnerScript : MonoBehaviour
 {
-    private List<EnemyScript> _enemies = new List<EnemyScript>();
 
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _spawnLocation;
     [SerializeField] private float _spawnMinInterval;
     [SerializeField] private float _spawnMaxInterval;
 
-    [Header("Speed Up Values")]
-    [SerializeField] private bool _areEnemiesSpeedingUp = false;
+    private List<EnemyScript> _enemies = new List<EnemyScript>();
+    private float _currentSpeedMultiplier = 1;
+    private Coroutine _spawnerCoroutine;
 
     private void Start()
     {
-        StartCoroutine(TimerScript.Instance.CO_ExecuteInRandomIntervals(SpawnEnemy, _spawnMinInterval, _spawnMaxInterval));
+        StartSpawningEnemies();
     }
 
-    public void SpeedUpEnemies()
+    public void StartSpawningEnemies()
     {
-
+        _spawnerCoroutine = StartCoroutine(TimerScript.Instance.CO_ExecuteInRandomIntervals(SpawnEnemy, _spawnMinInterval, _spawnMaxInterval));
     }
 
-    public void RevertEnemies()
+    public void StopSpawningEnemies()
     {
+        StopCoroutine(_spawnerCoroutine);
+    }
 
+    public void ChangeEnemySpeed(float multiplier)
+    {
+        _currentSpeedMultiplier = multiplier;
+
+        foreach (EnemyScript enemy in _enemies)
+        {
+            enemy.ChangeSpeed(_currentSpeedMultiplier);
+        }
+    }
+
+    public void RevertEnemySpeed()
+    {
+        _currentSpeedMultiplier = 1;
+
+        foreach (EnemyScript enemy in _enemies)
+        {
+            enemy.RevertSpeed();
+        }
+    }
+
+    public void RemoveEnemy(EnemyScript enemy)
+    {
+        _enemies.Remove(enemy);
+    }
+
+    public void ResetAllEnemies()
+    {
+        foreach(EnemyScript enemy in _enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+
+        _enemies.Clear();
+    }
+
+    public int CheckEnemyCount()
+    {
+        return _enemies.Count;
     }
 
     private void SpawnEnemy()
@@ -34,7 +74,7 @@ public class SpawnerScript : MonoBehaviour
         GameObject enemy = Instantiate(_enemyPrefab, _spawnLocation.transform.position, Quaternion.identity);
         EnemyScript enemyScript = enemy.GetComponent<EnemyScript>();
 
-        enemyScript.Initialize();
+        enemyScript.Initialize(this, _currentSpeedMultiplier);
         _enemies.Add(enemyScript);
     }
 

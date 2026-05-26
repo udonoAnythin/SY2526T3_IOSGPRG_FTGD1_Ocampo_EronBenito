@@ -18,18 +18,21 @@ public class GroundScript : MonoBehaviour
     {
         ScrollGround();
     }
+
+    public void ChangeSpeed(float multiplier)
+    {
+        _speed = _baseSpeed * multiplier;
+    }
+
+    public void RevertSpeed()
+    {
+        _speed = _baseSpeed;
+    }
+
     private void ScrollGround()
     {
         _groundMaterial.mainTextureOffset += Vector2.right * _speed * Time.deltaTime;
     }
 
-    private void ChangeSpeed(float multiplier)
-    {
-        _speed = _baseSpeed * multiplier;
-    }
-
-    private void RevertSpeed()
-    {
-        _speed = _baseSpeed;
-    }
+    
 }
