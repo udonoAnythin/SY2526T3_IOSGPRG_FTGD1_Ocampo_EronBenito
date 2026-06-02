@@ -80,7 +80,7 @@ public class TimerScript : Singleton<TimerScript>
     {
         float currentTime = 0;
 
-        while (currentTime <= duration)
+        do
         {
             currentTime += Time.deltaTime;
 
@@ -88,7 +88,7 @@ public class TimerScript : Singleton<TimerScript>
 
             yield return null;
 
-        }
+        } while (currentTime <= duration);
 
         if (actionWhenCompleted != null)
         {

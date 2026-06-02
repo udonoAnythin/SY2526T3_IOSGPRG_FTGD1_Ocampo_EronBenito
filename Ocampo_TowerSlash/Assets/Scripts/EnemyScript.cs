@@ -19,11 +19,14 @@ public class EnemyScript : MonoBehaviour
     [Header("Enemy Variables")]
     [SerializeField] private SpawnerScript _spawner;
     [SerializeField] private float _enemyBaseSpeed = 1;
+    [SerializeField] private GameObject _deathParticles;
+    [SerializeField] private AudioClip _deathSFX;
 
     [Header("Arrow Variables")]
     [SerializeField] private SpriteRenderer _arrowRenderer;
     [SerializeField] private List<Sprite> _arrowSprites = new List<Sprite>();
     [SerializeField] private GameObject _arrowBackground;
+    [SerializeField] private AudioClip _enemyDetectSFX;
 
     private float _enemySpeed;
     private SwipeDirection _direction = SwipeDirection.Right;
@@ -40,6 +43,12 @@ public class EnemyScript : MonoBehaviour
     private void Update()
     {
         Move();
+    }
+
+    private void OnDestroy()
+    {
+        SoundManagerScript.Instance.PlaySFX(_deathSFX);
+        Instantiate(_deathParticles, transform.position, Quaternion.identity);
     }
 
     public void Initialize(SpawnerScript spawner, float speedMultiplier = 1)
@@ -60,6 +69,7 @@ public class EnemyScript : MonoBehaviour
     {
         //_isUndetectedByPlayer = false;
         _arrowBackground.SetActive(true);
+        SoundManagerScript.Instance.PlaySFX(_enemyDetectSFX);
 
         if (_arrowColor == ArrowColor.Yellow)
         {
@@ -78,8 +88,11 @@ public class EnemyScript : MonoBehaviour
     public void ChangeSpeed(float multiplier)
     {
         _enemySpeed = _enemyBaseSpeed * multiplier;
+    }
 
-        if (multiplier == 0 && _arrowColor == ArrowColor.Yellow)
+    public void StopYellowCoroutine()
+    {
+        if (_arrowColor == ArrowColor.Yellow)
         {
             StopCoroutine(_yellowCoroutine);
         }
@@ -101,7 +114,7 @@ public class EnemyScript : MonoBehaviour
         {
             case ArrowColor.Red:
 
-                Debug.Log($"{_direction} vs. {(int)(_direction + 2) % 4}");
+                //Debug.Log($"{_direction} vs. {(SwipeDirection)((int)(_direction + 2) % 4)}");
                 _arrowRenderer.sprite = _arrowSprites[ ((int)_direction + 2) % 4 ];
                 _arrowRenderer.color = Color.red;
                 break;
@@ -131,7 +144,7 @@ public class EnemyScript : MonoBehaviour
         _direction = (SwipeDirection) ((int)++_direction % 4);
         _arrowRenderer.sprite = _arrowSprites[(int)_direction];
         
-        //Debug.Log("Changing");
+        Debug.Log("Changing");
     }
 
 }

@@ -29,6 +29,14 @@ public class SpawnerScript : MonoBehaviour
         StopCoroutine(_spawnerCoroutine);
     }
 
+    public void StopArrowChanges()
+    {
+        foreach (EnemyScript enemy in _enemies)
+        {
+            enemy.StopYellowCoroutine();
+        }
+    }
+
     public void ChangeEnemySpeed(float multiplier)
     {
         _currentSpeedMultiplier = multiplier;

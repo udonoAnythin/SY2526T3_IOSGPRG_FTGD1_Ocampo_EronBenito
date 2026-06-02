@@ -2,11 +2,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum Character
+{
+    Default,
+    Tank,
+    Speed
+}
+
 public class PlayerScript : MonoBehaviour
 {
     public float Lives
     {
         get => _lives;
+        set => _lives = value;
     }
 
     public bool IsDashing
@@ -14,16 +22,36 @@ public class PlayerScript : MonoBehaviour
         get => _isDashing;
     }
 
+    public Character PlayerCharacter
+    {
+        get => _playerCharacter;
+        set => _playerCharacter = value;
+    }
+
     public UnityEvent PlayerDamaged
     {
         get => _playerDamage;
     }
 
+    public UnityEvent EnemyKilled
+    {
+        get => _enemyKilled;
+    }
+
+    [Header("Variables and References")]
     [SerializeField] private float _lives = 3;
+    [SerializeField] private Character _playerCharacter = Character.Default;
     [SerializeField] private SwipeDetectionScript _swipeDetectionScript;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+
+    [Header("Death Variables")]
+    [SerializeField] private GameObject _deathParticles;
+    [SerializeField] private AudioClip _deathSFX;
 
     [Header("Events")]
     [SerializeField] private UnityEvent _playerDamage = new UnityEvent();
+    [SerializeField] private UnityEvent _enemyKilled = new UnityEvent();
 
     private Queue<EnemyScript> _enemies = new Queue<EnemyScript>();
     private bool _isDashing = false;
@@ -34,6 +62,8 @@ public class PlayerScript : MonoBehaviour
         _swipeDetectionScript.SwipedRight.AddListener(OnSwipeRight);
         _swipeDetectionScript.SwipedDown.AddListener(OnSwipeDown);
         _swipeDetectionScript.SwipedUp.AddListener(OnSwipeUp);
+
+        _enemyKilled.AddListener(DoAttackAnimation);
     }
 
     private void OnDisable()
@@ -42,6 +72,8 @@ public class PlayerScript : MonoBehaviour
         _swipeDetectionScript.SwipedRight.RemoveListener(OnSwipeRight);
         _swipeDetectionScript.SwipedDown.RemoveListener(OnSwipeDown);
         _swipeDetectionScript.SwipedUp.RemoveListener(OnSwipeUp);
+
+        _enemyKilled.RemoveListener(DoAttackAnimation);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -50,16 +82,9 @@ public class PlayerScript : MonoBehaviour
 
         if (enemy != null)
         {
-            if (_isDashing)
-            {
-                enemy.TakeDamage();
-            }
-            else
-            {
-                enemy.GetDetectedByPlayer();
+            enemy.GetDetectedByPlayer();
 
-                _enemies.Enqueue(enemy);
-            }
+            _enemies.Enqueue(enemy);
         }
     }
 
@@ -67,25 +92,51 @@ public class PlayerScript : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<EnemyScript>() == _enemies.Peek())
         {
+
             //Kill Enemy
             EnemyScript enemy = _enemies.Dequeue();
             enemy.TakeDamage();
+            _enemyKilled.Invoke();
 
-            //Reduce Lives
-            TakeDamage();
+            if (!_isDashing)
+            {
+                //Reduce Lives
+                TakeDamage();
 
+            }
         }
     }
 
+    public void SetCharacter(Character character)
+    {
+        _playerCharacter = character;
+
+        switch(_playerCharacter)
+        {
+            case Character.Default:
+
+                _animator.Play("DefaultPlayerRun");
+                break;
+
+            case Character.Tank:
+
+                _animator.Play("TankPlayerRun");
+                break;
+
+            case Character.Speed:
+
+                _animator.Play("SpeederPlayerRun");
+                break;
+        }
+    }
     public void SetDash(bool isDashing)
     {
         _isDashing = isDashing;
+    }
 
-        while (_enemies.Count > 0)
-        {
-            EnemyScript enemy = _enemies.Dequeue();
-            enemy.TakeDamage();
-        }
+    public void SetSpriteEnabled(bool isEnabled)
+    {
+        _spriteRenderer.enabled = isEnabled;
     }
 
     private void AttackNearestEnemy(SwipeDirection playerSwipe)
@@ -99,7 +150,11 @@ public class PlayerScript : MonoBehaviour
                 EnemyScript enemy = _enemies.Dequeue();
                 enemy.TakeDamage();
                 GainLifeThroughChance();
+
+                _enemyKilled.Invoke();
                 
+
+
             }
             else
             {
@@ -119,6 +174,10 @@ public class PlayerScript : MonoBehaviour
         //Clear all in queue for reset
         _enemies.Clear();
 
+        //Spawn Particles
+        Instantiate(_deathParticles, transform.position, Quaternion.identity);
+
+        SoundManagerScript.Instance.PlaySFX(_deathSFX);
     }
 
     private void GainLifeThroughChance()
@@ -152,6 +211,27 @@ public class PlayerScript : MonoBehaviour
     {
         if (_isDashing) return;
         AttackNearestEnemy(SwipeDirection.Up);
+    }
+
+    private void DoAttackAnimation()
+    {
+        switch (_playerCharacter)
+        {
+            case Character.Default:
+
+                _animator.Play("DefaultPlayerAttack");
+                break;
+
+            case Character.Tank:
+
+                _animator.Play("TankPlayerAttack");
+                break;
+
+            case Character.Speed:
+
+                _animator.Play("SpeederPlayerAttack");
+                break;
+        }
     }
     
 }

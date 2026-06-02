@@ -54,13 +54,13 @@ public class SwipeDetectionScript : MonoBehaviour
     private InputAction _touchPressAction;
     private InputAction _touchPositionAction;
 
-    private Vector2 _touchStart = Vector2.zero;
-    private Vector2 _touchEnd = Vector2.zero;
+    private Vector2 _touchStart;// = Vector2.zero;
+    private Vector2 _touchEnd;// = Vector2.zero;
 
     private void Awake()
     {
-        _touchPressAction = _playerInput.actions["TouchPress"];
         _touchPositionAction = _playerInput.actions["TouchPosition"];
+        _touchPressAction = _playerInput.actions["TouchPress"];
     }
 
     private void OnEnable()
@@ -85,10 +85,15 @@ public class SwipeDetectionScript : MonoBehaviour
         _playerInput.actions.Disable();
     }
 
+    public bool CheckIfInputEnabled()
+    {
+        return _playerInput.actions.enabled;
+    }
+
     private void OnTouchStarted(InputAction.CallbackContext context)
     {
         _touchStart = _touchPositionAction.ReadValue<Vector2>();
-
+        //Debug.Log($"Touch Start {_touchStart}");
         //Debug.Log("Tapped!");
     }
 
@@ -99,7 +104,7 @@ public class SwipeDetectionScript : MonoBehaviour
         Vector2 direction = _touchEnd - _touchStart;
 
         //Actions when tapped
-        if (direction.magnitude < 0.5)
+        if (direction.magnitude < 1f)
         {
             //Tapped Functions
             Debug.Log("Tapped");
@@ -113,43 +118,35 @@ public class SwipeDetectionScript : MonoBehaviour
             direction.Normalize();
         }
 
-        //Actions when swiped
-        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        //Debug.Log($"Touch Start {_touchStart}");
+        //Debug.Log($"Touch End: {_touchEnd}");
+
+        //Left Direction Swipe
+        if (Vector2.Dot(direction, Vector2.left) > 0.5f)
         {
-            if (_touchEnd.x < _touchStart.x)
-            {
-                Debug.Log("Player Swiped Left");
-                //_playerScript.AttackNearestEnemy(SwipeDirection.Left);
-
-                _swipedLeft.Invoke();
-
-            }
-            else if (_touchEnd.x > _touchStart.x)
-            {
-                Debug.Log("Player Swiped Right");
-                //_playerScript.AttackNearestEnemy(SwipeDirection.Right);
-
-                _swipedRight.Invoke();
-
-            }
+            Debug.Log("Player Swiped Left");
+            _swipedLeft.Invoke();
         }
-        else if (Mathf.Abs(direction.x) < Mathf.Abs(direction.y))
+
+        //right Direction Swipe
+        else if (Vector2.Dot(direction, Vector2.right) > 0.5f)
         {
-            if (_touchEnd.y < _touchStart.y)
-            {
-                Debug.Log("Player Swiped Down");
-                //_playerScript.AttackNearestEnemy(SwipeDirection.Down);
+            Debug.Log("Player Swiped Right");
+            _swipedRight.Invoke();
+        }
 
-                _swipedDown.Invoke();
-            }
-            else if (_touchEnd.y > _touchStart.y)
-            {
-                Debug.Log("Player Swiped Up");
-                //_playerScript.AttackNearestEnemy(SwipeDirection.Up);
+        //up Direction Swipe
+        else if (Vector2.Dot(direction, Vector2.up) > 0.5f)
+        {
+            Debug.Log("Player Swiped Up");
+            _swipedUp.Invoke();
+        }
 
-                _swipedUp.Invoke();
-
-            }
+        //down Direction Swipe
+        else if (Vector2.Dot(direction, Vector2.down) > 0.5f)
+        {
+            Debug.Log("Player Swiped Down");
+            _swipedDown.Invoke();
         }
 
     }
