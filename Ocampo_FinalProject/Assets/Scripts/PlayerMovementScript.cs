@@ -16,6 +16,7 @@ public class PlayerMovementScript : MonoBehaviour
     [SerializeField] private GameObject _body;
     [SerializeField] private float _aimAcceleration = 0.5f;
 
+
     private Rigidbody2D _rigidbody;
 
     private void Awake()
@@ -41,7 +42,8 @@ public class PlayerMovementScript : MonoBehaviour
 
     private void DoAim()
     {
-        _body.transform.rotation = Quaternion.Lerp(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(_controlScript.AimVector.y, _controlScript.AimVector.x) * Mathf.Rad2Deg), _aimAcceleration);
+        if (_controlScript.AimVector != Vector2.zero)
+            _body.transform.rotation = Quaternion.Lerp(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(_controlScript.AimVector.y, _controlScript.AimVector.x) * Mathf.Rad2Deg), _aimAcceleration);
     }
 
 
