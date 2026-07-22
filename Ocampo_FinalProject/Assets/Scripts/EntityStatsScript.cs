@@ -18,9 +18,10 @@ public class EntityStatsScript : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (damage > 0)
-        {
             _currentHealth -= damage;
-        }
+
+        if (_currentHealth < 0)
+            _currentHealth = 0;
     }
 
 }

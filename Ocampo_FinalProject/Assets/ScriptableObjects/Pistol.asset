@@ -15,5 +15,9 @@ MonoBehaviour:
   currentLoadedBullets: 0
   _magSize: 15
   _gunType: 0
+  _gunMode: 0
   _gunWorldSprite: {fileID: 21300000, guid: b794a98eb26695d4aa5d5152a638ec66, type: 3}
   _gunHoldSprite: {fileID: 21300000, guid: e7f19e3a2846e4245ba5cebe9f844c27, type: 3}
+  _damage: 10
+  _fireRate: 2.16
+  _reloadSpeed: 2

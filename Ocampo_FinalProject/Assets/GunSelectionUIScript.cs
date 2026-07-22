@@ -34,30 +34,12 @@ public class GunSelectionUIScript : MonoBehaviour
     {
         Debug.Log("Primary Selected");
 
-        _primaryButtonImage.color = _selected;
-        _secondaryButtonImage.color = _unselected;
-
-        _numberText1.color = Color.black;
-        _numberText2.color = Color.white;
-
-        _primaryText.color = Color.black;
-        _secondaryText.color = Color.white;
-
         _playerStats.SelectPrimaryGun();
     }
 
     public void BTN_SecondarySelect()
     {
         Debug.Log("Secondary Selected");
-
-        _secondaryButtonImage.color = _selected;
-        _primaryButtonImage.color = _unselected;
-
-        _numberText2.color = Color.black;
-        _numberText1.color = Color.white;
-
-        _secondaryText.color = Color.black;
-        _primaryText.color = Color.white;
 
         _playerStats.SelectSecondaryGun();
 
@@ -79,6 +61,34 @@ public class GunSelectionUIScript : MonoBehaviour
         {
             _secondaryImage.enabled = true;
             _secondaryImage.sprite = _playerStats.Secondary.GunWorldSprite;
+        }
+
+        if (_playerStats.HeldGun != null)
+        {
+            if (_playerStats.HeldGun == _playerStats.Primary)
+            {
+                _primaryButtonImage.color = _selected;
+                _secondaryButtonImage.color = _unselected;
+
+                _numberText1.color = Color.black;
+                _numberText2.color = Color.white;
+
+                _primaryText.color = Color.black;
+                _secondaryText.color = Color.white;
+            }
+            else if (_playerStats.HeldGun == _playerStats.Secondary)
+            {
+                _secondaryButtonImage.color = _selected;
+                _primaryButtonImage.color = _unselected;
+
+                _numberText2.color = Color.black;
+                _numberText1.color = Color.white;
+
+                _secondaryText.color = Color.black;
+                _primaryText.color = Color.white;
+
+                _playerStats.SelectSecondaryGun();
+            }
         }
 
     }
