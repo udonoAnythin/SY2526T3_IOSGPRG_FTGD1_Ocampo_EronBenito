@@ -8,7 +8,7 @@ public class AmmoScript : MonoBehaviour
     { get => _gunType; }
 
     public int AmmoCount
-    { get => _ammoCount; }
+    { get => Random.Range(_minAmmo, _maxAmmo); }
 
     [SerializeField] private GunType _gunType;
     [SerializeField] private int _ammoCount;
@@ -16,8 +16,14 @@ public class AmmoScript : MonoBehaviour
     [SerializeField] private int _maxAmmo;
     [SerializeField] private int _minAmmo;
 
-    private void Awake()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        _ammoCount = Random.Range(_minAmmo, _maxAmmo);
+        PlayerGunScript player = collision.GetComponent<PlayerGunScript>();
+
+        if (player != null)
+        {
+            player.CollectBullets(this);
+            Destroy(gameObject);
+        }
     }
 }

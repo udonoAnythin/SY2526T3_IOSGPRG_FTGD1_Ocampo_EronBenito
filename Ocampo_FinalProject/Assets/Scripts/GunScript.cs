@@ -12,12 +12,35 @@ public enum GunType
 public class GunScript : MonoBehaviour
 {
 
-    public GunType Type
-    { get => _gunType; }
+    public GunData GunData
+    { get => _gunData; }
 
-    public int magSize;
-    public int currentLoadedBullets;
+    [SerializeField] private GunData _gunData;
+    [SerializeField] private int _minLoadedBullets;
+    [SerializeField] private int _maxLoadedBullets;
 
-    private GunType _gunType;
+    private void Awake()
+    {
+        SpawnGun();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        PlayerGunScript player = collision.GetComponent<PlayerGunScript>();
+
+        if (player != null)
+        {
+            player.CollectGun(this);
+            Destroy(gameObject);
+        }
+    }
+
+    private void SpawnGun()
+    {
+        // Instantiate a copy of the Gun Data
+        _gunData = Instantiate(_gunData);
+
+        _gunData.currentLoadedBullets = Random.Range(_minLoadedBullets, _maxLoadedBullets);
+    }
 
 }

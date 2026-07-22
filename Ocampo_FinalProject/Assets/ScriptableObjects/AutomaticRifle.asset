@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5efaa9b9baa5b342b1a2b2f126690d3, type: 3}
+  m_Name: AutomaticRifle
+  m_EditorClassIdentifier: 
+  currentLoadedBullets: 0
+  _magSize: 30
+  _gunType: 1
+  _gunWorldSprite: {fileID: 21300000, guid: f9cba374a47aee14f88f3598ec04706e, type: 3}
+  _gunHoldSprite: {fileID: 21300000, guid: 604dc95bf59a10e498c0012e027a2ca0, type: 3}
