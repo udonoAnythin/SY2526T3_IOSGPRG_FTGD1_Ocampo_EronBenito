@@ -98,7 +98,7 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<EntityStatsScript>() != null)
+        if (collision.GetComponent<EntityStatsScript>() != null && collision.transform.parent != transform)
         {
             _targets.Add(collision.transform);
 
@@ -204,7 +204,7 @@ public class EnemyStateMachineScript : MonoBehaviour
         PathfindingNode currentNode = startNode;
 
         // Pathfinding 
-        while (currentNode.coordinates != endCoords)
+        while (Vector2.Distance(currentNode.coordinates, endCoords) < 0.5f)
         {
 
             UnityAction<float, float> CheckNeighbor = (float xCoordNeighbor, float yCoordNeighbor) =>
@@ -268,7 +268,7 @@ public class EnemyStateMachineScript : MonoBehaviour
         // Backtracking from the destination node
         PathfindingNode backtrackedNode = currentNode;
 
-        while (backtrackedNode.coordinates != startCoords)
+        while ( Vector2.Distance(backtrackedNode.coordinates, startCoords) < 0.5f )
         {
             finalPath.Push(backtrackedNode.coordinates);
             backtrackedNode = previousNode[backtrackedNode];
@@ -289,7 +289,7 @@ public class EnemyStateMachineScript : MonoBehaviour
         {
             Vector2 randomDirection = Quaternion.Euler(0, 0, Random.Range(0, 360)) * Vector2.right;
             randomPoint = randomDirection * Random.Range(0, _rangeCollider.radius);
-        } while (Physics2D.OverlapCircle(randomPoint, _bodyCollision.radius, 0) == null);
+        } while (Physics2D.OverlapCircle(randomPoint, _bodyCollision.radius, 0) != null);
 
         return randomPoint;
     }
