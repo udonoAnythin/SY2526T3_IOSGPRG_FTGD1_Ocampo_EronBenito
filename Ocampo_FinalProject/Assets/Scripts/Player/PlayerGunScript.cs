@@ -47,7 +47,6 @@ public class PlayerGunScript : MonoBehaviour
     [SerializeField] private SpriteRenderer _gunHolder;
 
     [SerializeField] private Transform _bulletSpawnPoint;
-    [SerializeField] private GameObject _bulletPrefab;
 
     [Header("Gun Variables")]
     [SerializeField] private GunState _gunState;
@@ -306,13 +305,13 @@ public class PlayerGunScript : MonoBehaviour
             {
                 float angle = Random.Range(-_currentHeldGun.ShotgunArcAngle, _currentHeldGun.ShotgunArcAngle);
                 Vector2 rotatedDirection = Quaternion.Euler(0, 0, angle) * Vector2.up;
-                BulletScript newBullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<BulletScript>();
+                BulletScript newBullet = Instantiate(_currentHeldGun.BulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<BulletScript>();
                 newBullet.Initialize(_bulletSpawnPoint.transform.TransformDirection(rotatedDirection), _currentHeldGun.Damage);
             }
         }
         else
         {
-            BulletScript newBullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<BulletScript>();
+            BulletScript newBullet = Instantiate(_currentHeldGun.BulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<BulletScript>();
             newBullet.Initialize(_bulletSpawnPoint.transform.TransformDirection(Vector2.up), _currentHeldGun.Damage);
         }
 

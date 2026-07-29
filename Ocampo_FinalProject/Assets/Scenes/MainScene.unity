@@ -507,7 +507,7 @@ GameObject:
   - component: {fileID: 36790024}
   - component: {fileID: 36790026}
   - component: {fileID: 36790025}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetalBarrel (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +627,7 @@ GameObject:
   - component: {fileID: 46366444}
   - component: {fileID: 46366446}
   - component: {fileID: 46366445}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -832,7 +832,7 @@ GameObject:
   - component: {fileID: 78674012}
   - component: {fileID: 78674014}
   - component: {fileID: 78674013}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -952,7 +952,7 @@ GameObject:
   - component: {fileID: 82946039}
   - component: {fileID: 82946041}
   - component: {fileID: 82946040}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1206,7 +1206,7 @@ GameObject:
   - component: {fileID: 183990151}
   - component: {fileID: 183990153}
   - component: {fileID: 183990152}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1336,7 +1336,7 @@ GameObject:
   - component: {fileID: 190000702}
   - component: {fileID: 190000704}
   - component: {fileID: 190000703}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1638,7 +1638,7 @@ GameObject:
   - component: {fileID: 252658305}
   - component: {fileID: 252658307}
   - component: {fileID: 252658306}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1832,7 +1832,7 @@ GameObject:
   - component: {fileID: 294150906}
   - component: {fileID: 294150908}
   - component: {fileID: 294150907}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1962,7 +1962,7 @@ GameObject:
   - component: {fileID: 299959653}
   - component: {fileID: 299959655}
   - component: {fileID: 299959654}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2157,7 +2157,7 @@ GameObject:
   - component: {fileID: 309346445}
   - component: {fileID: 309346447}
   - component: {fileID: 309346446}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2287,7 +2287,7 @@ GameObject:
   - component: {fileID: 311128639}
   - component: {fileID: 311128641}
   - component: {fileID: 311128640}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2407,7 +2407,7 @@ GameObject:
   - component: {fileID: 313288595}
   - component: {fileID: 313288597}
   - component: {fileID: 313288596}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2579,7 +2579,7 @@ GameObject:
   - component: {fileID: 347554331}
   - component: {fileID: 347554333}
   - component: {fileID: 347554332}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2699,7 +2699,7 @@ GameObject:
   - component: {fileID: 372576980}
   - component: {fileID: 372576982}
   - component: {fileID: 372576981}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2926,7 +2926,7 @@ GameObject:
   - component: {fileID: 444793932}
   - component: {fileID: 444793934}
   - component: {fileID: 444793933}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3046,7 +3046,7 @@ GameObject:
   - component: {fileID: 445850229}
   - component: {fileID: 445850231}
   - component: {fileID: 445850230}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3285,15 +3285,15 @@ MonoBehaviour:
   _rigidbody: {fileID: 0}
   _body: {fileID: 1255862989}
   _rangeCollider: {fileID: 450182760}
-  _bodyCollision: {fileID: 1255862990}
+  _bodyCollision: {fileID: 1255862992}
   _wanderTime: 5
-  _movementSpeed: 10
-  _acceleration: 0.5
+  _movementSpeed: 5
+  _acceleration: 0.1
   _targets: []
   _entityDetectionRange: 20
   _approachTargetRange: 7
-  _updatePathTimer: 2
   _heldGun: {fileID: 0}
+  _currentWanderTime: 0
 --- !u!4 &450182759
 Transform:
   m_ObjectHideFlags: 0
@@ -3383,7 +3383,7 @@ GameObject:
   - component: {fileID: 494327071}
   - component: {fileID: 494327073}
   - component: {fileID: 494327072}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3670,7 +3670,7 @@ GameObject:
   - component: {fileID: 521428445}
   - component: {fileID: 521428447}
   - component: {fileID: 521428446}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Woodpile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3864,7 +3864,7 @@ GameObject:
   - component: {fileID: 544369207}
   - component: {fileID: 544369209}
   - component: {fileID: 544369208}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3994,7 +3994,7 @@ GameObject:
   - component: {fileID: 565771089}
   - component: {fileID: 565771091}
   - component: {fileID: 565771090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4242,7 +4242,7 @@ GameObject:
   - component: {fileID: 631634426}
   - component: {fileID: 631634428}
   - component: {fileID: 631634427}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4497,7 +4497,7 @@ GameObject:
   - component: {fileID: 645362356}
   - component: {fileID: 645362355}
   - component: {fileID: 645362354}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hedgehog (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4672,7 +4672,7 @@ GameObject:
   - component: {fileID: 648823384}
   - component: {fileID: 648823386}
   - component: {fileID: 648823385}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4802,7 +4802,7 @@ GameObject:
   - component: {fileID: 678134959}
   - component: {fileID: 678134961}
   - component: {fileID: 678134960}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5001,7 +5001,7 @@ GameObject:
   - component: {fileID: 685609318}
   - component: {fileID: 685609320}
   - component: {fileID: 685609319}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Woodpile (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5131,7 +5131,7 @@ GameObject:
   - component: {fileID: 751534621}
   - component: {fileID: 751534623}
   - component: {fileID: 751534622}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5317,7 +5317,7 @@ GameObject:
   - component: {fileID: 871308869}
   - component: {fileID: 871308871}
   - component: {fileID: 871308870}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5437,7 +5437,7 @@ GameObject:
   - component: {fileID: 890708384}
   - component: {fileID: 890708386}
   - component: {fileID: 890708385}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5557,7 +5557,7 @@ GameObject:
   - component: {fileID: 901730291}
   - component: {fileID: 901730293}
   - component: {fileID: 901730292}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5781,7 +5781,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1665122164}
   - {fileID: 380503002}
   - {fileID: 2027218097}
   - {fileID: 204980337}
@@ -5798,7 +5797,7 @@ GameObject:
   - component: {fileID: 989201965}
   - component: {fileID: 989201967}
   - component: {fileID: 989201966}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Woodpile (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5944,7 +5943,7 @@ GameObject:
   - component: {fileID: 1017462864}
   - component: {fileID: 1017462866}
   - component: {fileID: 1017462865}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6064,7 +6063,7 @@ GameObject:
   - component: {fileID: 1023324937}
   - component: {fileID: 1023324939}
   - component: {fileID: 1023324938}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6260,7 +6259,7 @@ GameObject:
   - component: {fileID: 1065437038}
   - component: {fileID: 1065437037}
   - component: {fileID: 1065437036}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hedgehog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6435,7 +6434,7 @@ GameObject:
   - component: {fileID: 1101890545}
   - component: {fileID: 1101890547}
   - component: {fileID: 1101890546}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6555,7 +6554,7 @@ GameObject:
   - component: {fileID: 1116634973}
   - component: {fileID: 1116634975}
   - component: {fileID: 1116634974}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7090,7 +7089,7 @@ GameObject:
   - component: {fileID: 1203702046}
   - component: {fileID: 1203702045}
   - component: {fileID: 1203702044}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hedgehog (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7371,7 +7370,7 @@ GameObject:
   - component: {fileID: 1229163326}
   - component: {fileID: 1229163325}
   - component: {fileID: 1229163324}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hedgehog (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7546,7 +7545,7 @@ GameObject:
   - component: {fileID: 1249863621}
   - component: {fileID: 1249863623}
   - component: {fileID: 1249863622}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7664,9 +7663,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1255862989}
-  - component: {fileID: 1255862990}
   - component: {fileID: 1255862992}
-  - component: {fileID: 1255862991}
+  - component: {fileID: 1255862990}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -7693,7 +7691,21 @@ Transform:
   - {fileID: 1983510106}
   m_Father: {fileID: 450182759}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1255862990
+--- !u!114 &1255862990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255862988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1461484e5c0c77c4e8e64e1b3714b2b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 100
+  _currentHealth: 0
+--- !u!58 &1255862992
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7728,47 +7740,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
---- !u!114 &1255862991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1255862988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1461484e5c0c77c4e8e64e1b3714b2b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHealth: 100
-  _currentHealth: 0
---- !u!50 &1255862992
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1255862988}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &1264292029
 GameObject:
   m_ObjectHideFlags: 0
@@ -8110,7 +8081,7 @@ GameObject:
   - component: {fileID: 1333702297}
   - component: {fileID: 1333702296}
   - component: {fileID: 1333702295}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hedgehog (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8285,7 +8256,7 @@ GameObject:
   - component: {fileID: 1346892698}
   - component: {fileID: 1346892700}
   - component: {fileID: 1346892699}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetalBarrel (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8405,7 +8376,7 @@ GameObject:
   - component: {fileID: 1355613218}
   - component: {fileID: 1355613220}
   - component: {fileID: 1355613219}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8525,7 +8496,7 @@ GameObject:
   - component: {fileID: 1379047059}
   - component: {fileID: 1379047061}
   - component: {fileID: 1379047060}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetalBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8779,7 +8750,7 @@ GameObject:
   - component: {fileID: 1395426017}
   - component: {fileID: 1395426019}
   - component: {fileID: 1395426018}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8899,7 +8870,7 @@ GameObject:
   - component: {fileID: 1402830201}
   - component: {fileID: 1402830203}
   - component: {fileID: 1402830202}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9019,7 +8990,7 @@ GameObject:
   - component: {fileID: 1411764610}
   - component: {fileID: 1411764612}
   - component: {fileID: 1411764611}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetalBarrel (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9139,7 +9110,7 @@ GameObject:
   - component: {fileID: 1413478523}
   - component: {fileID: 1413478525}
   - component: {fileID: 1413478524}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9434,7 +9405,7 @@ GameObject:
   - component: {fileID: 1576549149}
   - component: {fileID: 1576549151}
   - component: {fileID: 1576549150}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9554,7 +9525,7 @@ GameObject:
   - component: {fileID: 1612655940}
   - component: {fileID: 1612655942}
   - component: {fileID: 1612655941}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9674,7 +9645,7 @@ GameObject:
   - component: {fileID: 1628079537}
   - component: {fileID: 1628079539}
   - component: {fileID: 1628079538}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Stone (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9794,7 +9765,7 @@ GameObject:
   - component: {fileID: 1653920793}
   - component: {fileID: 1653920795}
   - component: {fileID: 1653920794}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10048,7 +10019,7 @@ GameObject:
   - component: {fileID: 1663661191}
   - component: {fileID: 1663661193}
   - component: {fileID: 1663661192}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Silo (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10157,69 +10128,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1665122163
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1665122164}
-  - component: {fileID: 1665122165}
-  m_Layer: 0
-  m_Name: NavMesh
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1665122164
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1665122163}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.19, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 987484318}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1665122165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1665122163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 0
-  m_Size: {x: 10, y: 10, z: 10}
-  m_Center: {x: 0, y: 2, z: 0}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 1
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 0974186e20fa56046b4d9a04eab8c649, type: 2}
-  m_BuildHeightMesh: 0
 --- !u!1 &1689147347
 GameObject:
   m_ObjectHideFlags: 0
@@ -10440,7 +10348,7 @@ GameObject:
   - component: {fileID: 1700121991}
   - component: {fileID: 1700121993}
   - component: {fileID: 1700121992}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetalBarrel (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11056,7 +10964,7 @@ GameObject:
   - component: {fileID: 1735943980}
   - component: {fileID: 1735943982}
   - component: {fileID: 1735943981}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11176,7 +11084,7 @@ GameObject:
   - component: {fileID: 1750689882}
   - component: {fileID: 1750689884}
   - component: {fileID: 1750689883}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11900,7 +11808,7 @@ GameObject:
   - component: {fileID: 1813754288}
   - component: {fileID: 1813754290}
   - component: {fileID: 1813754289}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12020,7 +11928,7 @@ GameObject:
   - component: {fileID: 1878379534}
   - component: {fileID: 1878379536}
   - component: {fileID: 1878379535}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Silo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12140,7 +12048,7 @@ GameObject:
   - component: {fileID: 1878882533}
   - component: {fileID: 1878882535}
   - component: {fileID: 1878882534}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Crate (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12573,7 +12481,7 @@ GameObject:
   - component: {fileID: 1957191725}
   - component: {fileID: 1957191727}
   - component: {fileID: 1957191726}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bush (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12778,7 +12686,7 @@ GameObject:
   - component: {fileID: 2008239532}
   - component: {fileID: 2008239534}
   - component: {fileID: 2008239533}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12898,7 +12806,7 @@ GameObject:
   - component: {fileID: 2019696724}
   - component: {fileID: 2019696726}
   - component: {fileID: 2019696725}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetalBarrel (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13213,7 +13121,7 @@ GameObject:
   - component: {fileID: 2079885373}
   - component: {fileID: 2079885375}
   - component: {fileID: 2079885374}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

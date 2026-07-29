@@ -52,6 +52,9 @@ public class GunData : ScriptableObject
     public float ShotgunArcAngle
     { get => _gunType == GunType.Shotgun ? _shotgunArcAngle : 0; }
 
+    public GameObject BulletPrefab
+    { get => _bulletPrefab; }
+
     [Header("Loaded Bullet Data")]
     public int currentLoadedBullets;
     [SerializeField] private int _magSize;
@@ -66,4 +69,5 @@ public class GunData : ScriptableObject
     [SerializeField] private float _reloadSpeed;
 
     [SerializeField] private float _shotgunArcAngle;
+    [SerializeField] private GameObject _bulletPrefab;
 }

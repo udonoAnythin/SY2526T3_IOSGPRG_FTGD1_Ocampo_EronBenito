@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.GraphicsBuffer;
 
 public enum EnemyStates
 {
@@ -48,30 +50,34 @@ public class EnemyStateMachineScript : MonoBehaviour
     [SerializeField] private List<Transform> _targets = new List<Transform>();
     [SerializeField] private float _entityDetectionRange;
     [SerializeField] private float _approachTargetRange;
-    [SerializeField] private float _updatePathTimer;
 
     [Header("Destroy State Variable")]
+    [SerializeField] private GunState _gunState;
     [SerializeField] private GunData _heldGun;
+    [SerializeField] private List<GunData> _gunData;
+    [SerializeField] private Transform _bulletSpawnPoint;
 
-    private float _currentWanderTime;
-    private float _currentUpdatePathTimer;
+    [SerializeField] private float _currentWanderTime;
     private float _currentFireTimer;
     private float _currentReloadTimer;
 
-    private Stack<Vector2> _path;
+    private Vector2 _targetLocation;
 
     private void Awake()
     {
+        _rigidbody = GetComponent<Rigidbody2D>();
         _rangeCollider = GetComponent<CircleCollider2D>();
         _rangeCollider.radius = _entityDetectionRange;
 
         _currentWanderTime = _wanderTime;
-        _currentUpdatePathTimer = _updatePathTimer;
+        
     }
 
     private void Start()
     {
         EnterWanderState();
+
+        InitializeGun();
     }
 
     private void FixedUpdate()
@@ -98,7 +104,7 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<EntityStatsScript>() != null && collision.transform.parent != transform)
+        if (collision.GetComponent<EntityStatsScript>() != null)
         {
             _targets.Add(collision.transform);
 
@@ -108,7 +114,7 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<EntityStatsScript>() != null && _targets.Contains(collision.transform))
+        if (collision.GetComponent<EntityStatsScript>() != null)
         {
             _targets.Remove(collision.transform);
 
@@ -117,12 +123,19 @@ public class EnemyStateMachineScript : MonoBehaviour
         }
     }
 
+    private void InitializeGun()
+    {
+        _heldGun = _gunData[Random.Range(0, _gunData.Count)];
+        _heldGun.currentLoadedBullets = _heldGun.MagSize;
+    }
+
     private void WanderState()
     {
         Debug.Log("Updating Wander");
 
         if (_currentWanderTime > 0)
         {
+            
             TraversePath();
             _currentWanderTime -= Time.deltaTime;
         }
@@ -136,33 +149,82 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     private void SeekState()
     {
-        if (_currentUpdatePathTimer > 0)
-        {
-            _currentUpdatePathTimer -= Time.deltaTime;
-        }
-        else
-        {
-            Vector2 firstEndDest = _targets[0].position;
-            _path = Pathfind(new Vector2(transform.position.x, transform.position.y), firstEndDest);
-
-            _currentUpdatePathTimer = _updatePathTimer;
-        }
-
+        _targetLocation = _targets[0].position;
         TraversePath();
 
-        if (Vector2.Distance(_targets[0].position, transform.position) < _approachTargetRange)
+        if (Vector2.Distance(_targets[0].position, transform.position) <= _approachTargetRange)
             EnterDestroyState();
     }
 
     private void DestroyState()
     {
+        // Aim at enemy
+        RotateEntity(_targets[0].position);
 
+        // Fire or reload
+        switch (_gunState)
+        {
+            case GunState.Firing:
+
+                FiringGunSubState();
+                break;
+
+            default:
+                ReloadingGunSubState();
+                break;
+        }
+
+        if (Vector2.Distance(_targets[0].position, transform.position) > _approachTargetRange)
+        {
+            _targets.Sort((targetA, targetB) => (Vector2.Distance(targetA.position, transform.position).CompareTo(Vector2.Distance(targetB.position, transform.position))) );
+            if (Vector2.Distance(_targets[0].position, transform.position) > _approachTargetRange)
+                EnterSeekState();
+        }
     }
+
+    private void FiringGunSubState()
+    {
+        if (_currentFireTimer == _heldGun.FireRate)
+        {
+
+            if (_heldGun == null)
+                return;
+
+            ShootBullet();
+            _currentFireTimer -= Time.deltaTime;
+
+            if (_heldGun.currentLoadedBullets <= 0)
+            {
+                _gunState = GunState.Reloading;
+                return;
+            }
+
+        }
+        else if (_currentFireTimer > 0)
+            _currentFireTimer -= Time.deltaTime;
+        else
+        {
+            _currentFireTimer = _heldGun.FireRate;
+            if (_heldGun.Mode == GunMode.Semi_Automatic)
+                _gunState = GunState.Idle;
+        }
+    }
+
+    private void ReloadingGunSubState()
+    {
+        if (_currentReloadTimer > 0)
+            _currentReloadTimer -= Time.deltaTime;
+        else
+        {
+            _heldGun.currentLoadedBullets = _heldGun.MagSize;
+            _gunState = GunState.Firing;
+        }
+    }
+
 
     private void EnterWanderState()
     {
-        Vector2 firstEndDest = FindRandomDestination();
-        _path = Pathfind(new Vector2(transform.position.x, transform.position.y), firstEndDest);
+        _targetLocation = FindRandomDestination();
 
         _currentState = EnemyStates.Wander;
 
@@ -171,115 +233,19 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     private void EnterSeekState()
     {
-        Vector2 firstEndDest = _targets[0].position;
-        _path = Pathfind(new Vector2(transform.position.x, transform.position.y), firstEndDest);
-
+        _targetLocation = _targets[0].position;
         _currentState = EnemyStates.Seek;
     }
 
     private void EnterDestroyState()
     {
-
-    }
-
-    private Stack<Vector2> Pathfind(Vector2 startCoords, Vector2 endCoords)
-    {
-        // Nodes open for traversal
-        List<PathfindingNode> traversableNodes = new List<PathfindingNode>();
-
-        // Nodes already traversed
-        HashSet<Vector2> traversedCoordinates = new HashSet<Vector2>();
-
-        // Connections to previous nodes
-        Dictionary<PathfindingNode, PathfindingNode> previousNode = new Dictionary<PathfindingNode, PathfindingNode>();
-
-        // Final Path
-        Stack<Vector2> finalPath = new Stack<Vector2>();
-
-        // Set start node
-        PathfindingNode startNode = new PathfindingNode(startCoords);
-        traversableNodes.Add(startNode);
-
-        // Set node to be traversed on
-        PathfindingNode currentNode = startNode;
-
-        // Pathfinding 
-        while (Vector2.Distance(currentNode.coordinates, endCoords) < 0.5f)
-        {
-
-            UnityAction<float, float> CheckNeighbor = (float xCoordNeighbor, float yCoordNeighbor) =>
-            {
-                Vector2 neighborCoords = new Vector2(xCoordNeighbor, yCoordNeighbor);
-
-                // Check first if neighbor node is traversable / has no obstacles
-                if (Physics2D.OverlapCircle(neighborCoords, _bodyCollision.radius) == null && !traversedCoordinates.Contains(neighborCoords))
-                {
-                    // Check if the neighbor node is in the traversable list
-                    int indexTraversableNeighbor = traversableNodes.FindIndex((node) => (node.coordinates == neighborCoords));
-                    PathfindingNode neighborNode = null;
-
-                    if (indexTraversableNeighbor == -1)
-                    {
-                        neighborNode = new PathfindingNode(neighborCoords);
-                        traversableNodes.Add(neighborNode);
-
-                        previousNode.Add(neighborNode, currentNode);
-
-                        // Calculate new H Value
-                        neighborNode.H = Vector2.Distance(neighborCoords, endCoords);
-                    }
-                    else
-                        neighborNode = traversableNodes[indexTraversableNeighbor];
-
-                    // Calculate G value
-                    float newG = currentNode.G + Vector2.Distance(neighborCoords, currentNode.coordinates);
-
-                    if (neighborNode.G == -1 || newG < neighborNode.G)
-                        neighborNode.G = newG;
-
-                    // Calc F Value
-                    float newF = neighborNode.G + neighborNode.H;
-                    if (neighborNode.F == -1 || newF < neighborNode.F)
-                    {
-                        neighborNode.F = newF;
-                        previousNode[neighborNode] = currentNode;
-                    }
-                }
-            };
-
-            // Check all neighboring nodes
-            for (float i = 0; i <= 360; i+=_pathfindingAngleIncrement)
-            {
-                Vector2 coordinates = Quaternion.Euler(0, 0, i) * Vector2.right;
-                CheckNeighbor.Invoke(currentNode.coordinates.x + coordinates.x, currentNode.coordinates.y + coordinates.y);
-            }
-            
-            // Add current coordinates to traversed
-            traversedCoordinates.Add(currentNode.coordinates);
-            traversableNodes.Remove(currentNode);
-
-            if (traversableNodes.Count == 0) break;
-
-            // Look for the node with the least F value
-            traversableNodes.Sort((node, compareNode) => node.F.CompareTo(compareNode.F));
-            currentNode = traversableNodes[0];
-        }
-
-        // Backtracking from the destination node
-        PathfindingNode backtrackedNode = currentNode;
-
-        while ( Vector2.Distance(backtrackedNode.coordinates, startCoords) < 0.5f )
-        {
-            finalPath.Push(backtrackedNode.coordinates);
-            backtrackedNode = previousNode[backtrackedNode];
-        }
-        return finalPath;
+        _currentState = EnemyStates.Destroy;
     }
 
     private Vector2 FindRandomDestination()
     {
 
-        // For wander stat only
+        // For wander state only
         _currentWanderTime = _wanderTime;
 
         // Pick a random point inside the target range
@@ -289,38 +255,67 @@ public class EnemyStateMachineScript : MonoBehaviour
         {
             Vector2 randomDirection = Quaternion.Euler(0, 0, Random.Range(0, 360)) * Vector2.right;
             randomPoint = randomDirection * Random.Range(0, _rangeCollider.radius);
-        } while (Physics2D.OverlapCircle(randomPoint, _bodyCollision.radius, 0) != null);
+
+        } while (Physics2D.OverlapCircle(randomPoint, _bodyCollision.radius, LayerMask.GetMask("Obstacles")) != null);
+
+        Debug.Log("Random dest: " + randomPoint);
 
         return randomPoint;
     }
 
     private void TraversePath()
     {
-        Vector2 direction = _path.Peek() - new Vector2(transform.position.x, transform.position.y);
+        Vector2 direction = _targetLocation - new Vector2(transform.position.x, transform.position.y);
         direction.Normalize();
 
         _rigidbody.velocity = Vector2.Lerp(_rigidbody.velocity, direction * _movementSpeed, _acceleration);
 
-        RotateEntity(_path.Peek());
+        RotateEntity(direction);
 
-        if (Vector2.Distance(_path.Peek(), new Vector2(transform.position.x, transform.position.y)) < 0.1)
-        {
-            _path.Pop();
+        // If there is an obstacle in the way
+        if (Quaternion.Angle(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(_targetLocation.y, _targetLocation.x) * Mathf.Rad2Deg)) <  0.5f)
+            if (Physics2D.Raycast(transform.position, _body.right, _bodyCollision.radius * 2, LayerMask.GetMask("Obstacles")))
+                _targetLocation = FindRandomDestination();
 
-            // if rat has completed path, make a new path
-            if (_path.Count == 0)
-            {
-                Vector2 destination = FindRandomDestination();
-
-                _path = Pathfind(new Vector2(transform.position.x, transform.position.y), destination);
-            }
-        }
+        // If the enemy is near the location
+        if (Vector2.Distance(_targetLocation, new Vector2(transform.position.x, transform.position.y)) < 1)
+            _targetLocation = FindRandomDestination();
 
     }
 
     private void RotateEntity(Vector2 target)
     {
         _body.transform.rotation = Quaternion.Lerp(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg), _acceleration);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + _body.right * _movementSpeed);
+
+        Gizmos.DrawWireSphere(_targetLocation, _bodyCollision.radius);
+    }
+
+    private void ShootBullet()
+    {
+        _heldGun.currentLoadedBullets--;
+
+        if (_heldGun.Type == GunType.Shotgun)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                float angle = Random.Range(-_heldGun.ShotgunArcAngle, _heldGun.ShotgunArcAngle);
+                Vector2 rotatedDirection = Quaternion.Euler(0, 0, angle) * Vector2.up;
+                BulletScript newBullet = Instantiate(_heldGun.BulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<BulletScript>();
+                newBullet.Initialize(_bulletSpawnPoint.transform.TransformDirection(rotatedDirection), _heldGun.Damage);
+            }
+        }
+        else
+        {
+            BulletScript newBullet = Instantiate(_heldGun.BulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<BulletScript>();
+            newBullet.Initialize(_bulletSpawnPoint.transform.TransformDirection(Vector2.up), _heldGun.Damage);
+        }
+
+
     }
 
 }
