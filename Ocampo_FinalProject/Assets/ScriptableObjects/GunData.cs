@@ -15,6 +15,13 @@ public enum GunMode
     Automatic
 }
 
+public enum GunState
+{
+    Idle,
+    Firing,
+    Reloading
+}
+
 [CreateAssetMenu(fileName = "GunData", menuName = "ScriptableObjects/GunData")]
 public class GunData : ScriptableObject
 {
@@ -42,6 +49,9 @@ public class GunData : ScriptableObject
     public float ReloadSpeed
     { get => _reloadSpeed; }
 
+    public float ShotgunArcAngle
+    { get => _gunType == GunType.Shotgun ? _shotgunArcAngle : 0; }
+
     [Header("Loaded Bullet Data")]
     public int currentLoadedBullets;
     [SerializeField] private int _magSize;
@@ -54,4 +64,6 @@ public class GunData : ScriptableObject
     [SerializeField] private int _damage;
     [SerializeField] private float _fireRate;
     [SerializeField] private float _reloadSpeed;
+
+    [SerializeField] private float _shotgunArcAngle;
 }

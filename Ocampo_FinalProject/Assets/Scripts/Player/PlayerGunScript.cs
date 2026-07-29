@@ -4,15 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum GunState
-{
-    Idle,
-    Firing,
-    Reloading
-}
-
 [System.Serializable]
-public struct AmmoLoad
+public class AmmoLoad
 {
     public GunType gunType;
     public int currentPackedBullets;
@@ -58,7 +51,6 @@ public class PlayerGunScript : MonoBehaviour
 
     [Header("Gun Variables")]
     [SerializeField] private GunState _gunState;
-    [SerializeField] private float _shotgunArcAngle;
     private float _currentFireTimer;
     private float _currentReloadTimer;
 
@@ -105,7 +97,6 @@ public class PlayerGunScript : MonoBehaviour
         AmmoLoad newAmmo = _currentBullets[index];
         newAmmo.currentPackedBullets += ammo.AmmoCount;
         if (newAmmo.currentPackedBullets > newAmmo.maxLoadedBullets) newAmmo.currentPackedBullets = newAmmo.maxLoadedBullets;
-        _currentBullets[index] = newAmmo;
 
         // If the current gun has no bullets and is the same type as the picked up ammo
         if (_currentHeldGun != null)
@@ -313,7 +304,7 @@ public class PlayerGunScript : MonoBehaviour
         {
             for (int i = 0; i < 8; i++)
             {
-                float angle = Random.Range(-_shotgunArcAngle, _shotgunArcAngle);
+                float angle = Random.Range(-_currentHeldGun.ShotgunArcAngle, _currentHeldGun.ShotgunArcAngle);
                 Vector2 rotatedDirection = Quaternion.Euler(0, 0, angle) * Vector2.up;
                 BulletScript newBullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<BulletScript>();
                 newBullet.Initialize(_bulletSpawnPoint.transform.TransformDirection(rotatedDirection), _currentHeldGun.Damage);
@@ -352,7 +343,5 @@ public class PlayerGunScript : MonoBehaviour
         if (newAmmo.currentPackedBullets < 0) 
             newAmmo.currentPackedBullets = 0;
 
-        // Reassign the ammo
-        _currentBullets[index] = newAmmo;
     }
 }
