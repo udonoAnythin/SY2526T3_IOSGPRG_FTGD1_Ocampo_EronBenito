@@ -125,7 +125,7 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     private void InitializeGun()
     {
-        _heldGun = _gunData[Random.Range(0, _gunData.Count)];
+        _heldGun = Instantiate(_gunData[Random.Range(0, _gunData.Count)], transform);
         _heldGun.currentLoadedBullets = _heldGun.MagSize;
     }
 
@@ -159,7 +159,8 @@ public class EnemyStateMachineScript : MonoBehaviour
     private void DestroyState()
     {
         // Aim at enemy
-        RotateEntity(_targets[0].position);
+        Vector2 direction = (_targets[0].position - transform.position).normalized;
+        RotateEntity(direction);
 
         // Fire or reload
         switch (_gunState)
@@ -283,9 +284,9 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     }
 
-    private void RotateEntity(Vector2 target)
+    private void RotateEntity(Vector2 direction)
     {
-        _body.transform.rotation = Quaternion.Lerp(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg), _acceleration);
+        _body.transform.rotation = Quaternion.Lerp(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg), _acceleration);
     }
 
     private void OnDrawGizmos()

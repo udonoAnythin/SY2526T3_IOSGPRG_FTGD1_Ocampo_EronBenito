@@ -3291,8 +3291,14 @@ MonoBehaviour:
   _acceleration: 0.1
   _targets: []
   _entityDetectionRange: 20
-  _approachTargetRange: 7
+  _approachTargetRange: 10
+  _gunState: 0
   _heldGun: {fileID: 0}
+  _gunData:
+  - {fileID: 11400000, guid: ce3e29d0337affe4e8a202bf0e106635, type: 2}
+  - {fileID: 11400000, guid: 38a1042fa9cb46746b053317be7b2c3a, type: 2}
+  - {fileID: 11400000, guid: bfe622aa3a3ff7b429a33e3f7f205021, type: 2}
+  _bulletSpawnPoint: {fileID: 2121238088}
   _currentWanderTime: 0
 --- !u!4 &450182759
 Transform:
@@ -8014,7 +8020,6 @@ MonoBehaviour:
   _reloadMeter: {fileID: 1495984667}
   _gunHolder: {fileID: 54703119}
   _bulletSpawnPoint: {fileID: 1911890122}
-  _bulletPrefab: {fileID: 1310088359403135848, guid: c03e694bd85b3ee468de787fa4aea539, type: 3}
   _gunState: 0
 --- !u!114 &1323855458
 MonoBehaviour:
