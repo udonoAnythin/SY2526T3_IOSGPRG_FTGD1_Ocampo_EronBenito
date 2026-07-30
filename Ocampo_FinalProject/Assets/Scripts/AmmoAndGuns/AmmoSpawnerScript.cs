@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class AmmoSpawnerScript : MonoBehaviour
 {
-
+    [Header("Grass Area Reference")]
     [SerializeField] private SpriteRenderer _grassSprite;
 
+    [Header("Transform Parent")]
     [SerializeField] private GameObject _ammoSpawnParent;
 
     [Header("Ammo Prefabs")]
@@ -38,23 +39,21 @@ public class AmmoSpawnerScript : MonoBehaviour
         for (int i = 0; i < _ammoSpawnCount; i++)
         {
             // Identify Chance of spawning
-            float spawnCheck = Random.Range(0f, 1f);
-            if (spawnCheck <= _ammoSpawnChance) continue;
-
-            
+            float spawnChanceCheck = Random.Range(0f, 1f);
+            if (spawnChanceCheck <= _ammoSpawnChance) continue;
 
             // Get Random Area
             Vector2 spawnArea = new Vector2(_grassSprite.size.x / 2, _grassSprite.size.y / 2);
             Vector2 spawnOrigin = Vector2.zero;
 
-            // Detect if area already has a collider
-            Collider2D collidedArea = null;
+            // Detect if area near the spawn origin already has a collider
+            // Loop until it doesnt
+            Collider2D colliderWithinArea = null;
             do
             {
                 spawnOrigin = new Vector2(Random.Range(-spawnArea.x, spawnArea.x), Random.Range(-spawnArea.y, spawnArea.y));
-                collidedArea = Physics2D.OverlapBox(spawnOrigin, new Vector2(_ammoHalfSize, _ammoHalfSize), 0);
-            } while (collidedArea != null);
-            // Loop until it doesnt
+                colliderWithinArea = Physics2D.OverlapBox(spawnOrigin, new Vector2(_ammoHalfSize, _ammoHalfSize), 0);
+            } while (colliderWithinArea != null);
 
             int clusterCount = Random.Range(1, _ammoClusterCount + 1);
             for (int j = 0; j < clusterCount; j++)
@@ -64,15 +63,16 @@ public class AmmoSpawnerScript : MonoBehaviour
                 do
                 {
                     spawnOffset = new Vector2(Random.Range(-_ammoHalfSize * 2, _ammoHalfSize * 2), Random.Range(-_ammoHalfSize * 2, _ammoHalfSize * 2));
-                    collidedArea = Physics2D.OverlapBox(spawnOrigin + spawnOffset, new Vector2(_ammoHalfSize, _ammoHalfSize), 0);
+                    colliderWithinArea = Physics2D.OverlapBox(spawnOrigin + spawnOffset, new Vector2(_ammoHalfSize, _ammoHalfSize), 0);
                     checkerLimit--;
 
                     if (checkerLimit == 0) spawnOffset = Vector2.zero;
 
-                } while (collidedArea != null && checkerLimit > 0);
+                } while (colliderWithinArea != null && checkerLimit > 0);
 
                 if (spawnOffset == Vector2.zero) continue;
-                    // Instantiate on place
+                
+                // Instantiate on place
                 GameObject newBullet = Instantiate(ammoPrefab, spawnOrigin + spawnOffset, Quaternion.identity);
                 newBullet.transform.SetParent(_ammoSpawnParent.transform);
             }

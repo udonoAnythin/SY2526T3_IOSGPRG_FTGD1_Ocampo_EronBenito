@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GunSpawnerScript : MonoBehaviour
 {
+    [Header("Grass Area Reference")]
     [SerializeField] private SpriteRenderer _grassSprite;
 
+    [Header("Transform Parent")]
     [SerializeField] private GameObject _gunSpawnParent;
 
     [Header("Gun Prefabs")]
@@ -41,14 +43,14 @@ public class GunSpawnerScript : MonoBehaviour
             Vector2 spawnArea = new Vector2(_grassSprite.size.x / 2, _grassSprite.size.y / 2);
             Vector2 spawnOrigin = Vector2.zero;
 
-            // Detect if area already has a collider
-            Collider2D collidedArea = null;
+            // Detect if area nea the spawn origin already has a collider
+            // Loop until it doesnt
+            Collider2D colliderWithinArea = null;
             do
             {
                 spawnOrigin = new Vector2(Random.Range(-spawnArea.x, spawnArea.x), Random.Range(-spawnArea.y, spawnArea.y));
-                collidedArea = Physics2D.OverlapBox(spawnOrigin, new Vector2(_weaponHalfSize, _weaponHalfSize), 0);
-            } while (collidedArea != null);
-            // Loop until it doesnt
+                colliderWithinArea = Physics2D.OverlapBox(spawnOrigin, new Vector2(_weaponHalfSize, _weaponHalfSize), 0);
+            } while (colliderWithinArea != null);
 
             // Spawn Weapon
             GameObject newGun = Instantiate(gunPrefab, spawnOrigin, Quaternion.identity);

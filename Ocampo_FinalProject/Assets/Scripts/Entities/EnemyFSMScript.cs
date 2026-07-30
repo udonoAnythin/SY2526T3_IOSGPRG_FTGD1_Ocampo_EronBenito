@@ -31,7 +31,7 @@ public class PathfindingNode
 
 }
 
-public class EnemyStateMachineScript : MonoBehaviour
+public class EnemyFSMScript : MonoBehaviour
 {
     [Header("State Machine Variable")]
     [SerializeField] private EnemyStates _currentState;
@@ -47,14 +47,14 @@ public class EnemyStateMachineScript : MonoBehaviour
     [SerializeField] private float _acceleration;
 
     [Header("Seek State Variable")]
-    [SerializeField] private List<Transform> _targets = new List<Transform>();
+    [SerializeField] private List<Transform> _entitiesDetected = new List<Transform>();
     [SerializeField] private float _entityDetectionRange;
     [SerializeField] private float _approachTargetRange;
 
     [Header("Destroy State Variable")]
     [SerializeField] private GunState _gunState;
     [SerializeField] private GunData _heldGun;
-    [SerializeField] private List<GunData> _gunData;
+    [SerializeField] private SpriteRenderer _heldGunSprite;
     [SerializeField] private Transform _bulletSpawnPoint;
 
     [SerializeField] private float _currentWanderTime;
@@ -76,8 +76,6 @@ public class EnemyStateMachineScript : MonoBehaviour
     private void Start()
     {
         EnterWanderState();
-
-        InitializeGun();
     }
 
     private void FixedUpdate()
@@ -106,7 +104,7 @@ public class EnemyStateMachineScript : MonoBehaviour
     {
         if (collision.GetComponent<EntityStatsScript>() != null)
         {
-            _targets.Add(collision.transform);
+            _entitiesDetected.Insert(_entitiesDetected.Count, collision.transform);
 
             EnterSeekState();
         }
@@ -116,22 +114,26 @@ public class EnemyStateMachineScript : MonoBehaviour
     {
         if (collision.GetComponent<EntityStatsScript>() != null)
         {
-            _targets.Remove(collision.transform);
+            _entitiesDetected.Remove(collision.transform);
 
-            if (_targets.Count <= 0)
+            if (_entitiesDetected.Count <= 0)
                 EnterWanderState();
         }
     }
 
-    private void InitializeGun()
+    public void InitializeGun(GunData newGun)
     {
-        _heldGun = Instantiate(_gunData[Random.Range(0, _gunData.Count)], transform);
+        _heldGun = newGun;
         _heldGun.currentLoadedBullets = _heldGun.MagSize;
+
+        _currentFireTimer = _heldGun.FireRate;
+        _currentReloadTimer = _heldGun.ReloadSpeed;
+
+        _heldGunSprite.sprite = _heldGun.GunHoldSprite;
     }
 
     private void WanderState()
     {
-        Debug.Log("Updating Wander");
 
         if (_currentWanderTime > 0)
         {
@@ -149,18 +151,34 @@ public class EnemyStateMachineScript : MonoBehaviour
 
     private void SeekState()
     {
-        _targetLocation = _targets[0].position;
+        _targetLocation = _entitiesDetected[0].position;
         TraversePath();
 
-        if (Vector2.Distance(_targets[0].position, transform.position) <= _approachTargetRange)
+        if (Vector2.Distance(_entitiesDetected[0].position, transform.position) <= _approachTargetRange)
             EnterDestroyState();
     }
 
     private void DestroyState()
     {
+        // Lerp velocity to 0
+        _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, Vector3.zero, 0.5f);
+        if (Mathf.Abs(Vector3.zero.magnitude - _rigidbody.velocity.magnitude) < 0.2)
+            _rigidbody.velocity = Vector3.zero;
+
         // Aim at enemy
-        Vector2 direction = (_targets[0].position - transform.position).normalized;
+        Vector2 direction = (_entitiesDetected[0].position - transform.position).normalized;
         RotateEntity(direction);
+
+        // Detect if an enemy is in front of an obstacle
+        if (Quaternion.Angle(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(_targetLocation.y, _targetLocation.x) * Mathf.Rad2Deg)) < 0.5f)
+            if (Physics2D.BoxCast(transform.position, new Vector2(_bodyCollision.radius * 2, _bodyCollision.radius), 0, _body.right, _bodyCollision.radius, LayerMask.GetMask("Obstacles")))
+            {
+                _entitiesDetected.RemoveAt(0);
+                if (_entitiesDetected.Count <= 0)
+                    EnterWanderState();
+                else
+                    EnterSeekState();
+            }
 
         // Fire or reload
         switch (_gunState)
@@ -175,10 +193,10 @@ public class EnemyStateMachineScript : MonoBehaviour
                 break;
         }
 
-        if (Vector2.Distance(_targets[0].position, transform.position) > _approachTargetRange)
+        if (Vector2.Distance(_entitiesDetected[0].position, transform.position) > _approachTargetRange)
         {
-            _targets.Sort((targetA, targetB) => (Vector2.Distance(targetA.position, transform.position).CompareTo(Vector2.Distance(targetB.position, transform.position))) );
-            if (Vector2.Distance(_targets[0].position, transform.position) > _approachTargetRange)
+            _entitiesDetected.Sort((targetA, targetB) => (Vector2.Distance(targetA.position, transform.position).CompareTo(Vector2.Distance(targetB.position, transform.position))) );
+            if (Vector2.Distance(_entitiesDetected[0].position, transform.position) > _approachTargetRange)
                 EnterSeekState();
         }
     }
@@ -217,6 +235,7 @@ public class EnemyStateMachineScript : MonoBehaviour
             _currentReloadTimer -= Time.deltaTime;
         else
         {
+            _currentReloadTimer = _heldGun.ReloadSpeed;
             _heldGun.currentLoadedBullets = _heldGun.MagSize;
             _gunState = GunState.Firing;
         }
@@ -228,18 +247,17 @@ public class EnemyStateMachineScript : MonoBehaviour
         _targetLocation = FindRandomDestination();
 
         _currentState = EnemyStates.Wander;
-
-        Debug.Log("Entered Wander");
     }
 
     private void EnterSeekState()
     {
-        _targetLocation = _targets[0].position;
+        _targetLocation = _entitiesDetected[0].position;
         _currentState = EnemyStates.Seek;
     }
 
     private void EnterDestroyState()
     {
+        _rigidbody.velocity = Vector3.zero;
         _currentState = EnemyStates.Destroy;
     }
 
@@ -258,8 +276,6 @@ public class EnemyStateMachineScript : MonoBehaviour
             randomPoint = randomDirection * Random.Range(0, _rangeCollider.radius);
 
         } while (Physics2D.OverlapCircle(randomPoint, _bodyCollision.radius, LayerMask.GetMask("Obstacles")) != null);
-
-        Debug.Log("Random dest: " + randomPoint);
 
         return randomPoint;
     }
