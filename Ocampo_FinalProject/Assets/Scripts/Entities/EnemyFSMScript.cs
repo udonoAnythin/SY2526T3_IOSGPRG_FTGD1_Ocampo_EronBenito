@@ -14,32 +14,15 @@ public enum EnemyStates
     Destroy
 }
 
-public class PathfindingNode
-{
-    public Vector2 coordinates;
-
-    // Values
-    public float
-        G = -1,
-        H = 0,
-        F = -1;
-
-    public PathfindingNode(Vector2 coordinates)
-    {
-        this.coordinates = coordinates;
-    }
-
-}
-
 public class EnemyFSMScript : MonoBehaviour
 {
     [Header("State Machine Variable")]
     [SerializeField] private EnemyStates _currentState;
-    [SerializeField] private float _pathfindingAngleIncrement;
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private Transform _body;
     [SerializeField] private CircleCollider2D _rangeCollider;
-    [SerializeField] private CircleCollider2D _bodyCollision;
+    [SerializeField] private float _pathfindingAngleIncrement;
+    [SerializeField] private float _bodyCollisionRadius;
 
     [Header("Wander State Variable")]
     [SerializeField] private float _wanderTime;
@@ -65,12 +48,16 @@ public class EnemyFSMScript : MonoBehaviour
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();
         _rangeCollider = GetComponent<CircleCollider2D>();
         _rangeCollider.radius = _entityDetectionRange;
 
         _currentWanderTime = _wanderTime;
         
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(_heldGun);
     }
 
     private void Start()
@@ -102,7 +89,7 @@ public class EnemyFSMScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<EntityStatsScript>() != null)
+        if (collision.GetComponent<EntityStatsScript>() != null && collision.gameObject != _rigidbody.gameObject) // Stop it detecting itself
         {
             _entitiesDetected.Insert(_entitiesDetected.Count, collision.transform);
 
@@ -112,7 +99,7 @@ public class EnemyFSMScript : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<EntityStatsScript>() != null)
+        if (collision.GetComponent<EntityStatsScript>() != null && collision.gameObject != _rigidbody.gameObject) // Stop it detecting itself
         {
             _entitiesDetected.Remove(collision.transform);
 
@@ -171,7 +158,7 @@ public class EnemyFSMScript : MonoBehaviour
 
         // Detect if an enemy is in front of an obstacle
         if (Quaternion.Angle(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(_targetLocation.y, _targetLocation.x) * Mathf.Rad2Deg)) < 0.5f)
-            if (Physics2D.BoxCast(transform.position, new Vector2(_bodyCollision.radius * 2, _bodyCollision.radius), 0, _body.right, _bodyCollision.radius, LayerMask.GetMask("Obstacles")))
+            if (Physics2D.BoxCast(transform.position, new Vector2(_bodyCollisionRadius * 2, _bodyCollisionRadius), 0, _body.right, _bodyCollisionRadius, LayerMask.GetMask("Obstacles")))
             {
                 _entitiesDetected.RemoveAt(0);
                 if (_entitiesDetected.Count <= 0)
@@ -275,7 +262,7 @@ public class EnemyFSMScript : MonoBehaviour
             Vector2 randomDirection = Quaternion.Euler(0, 0, Random.Range(0, 360)) * Vector2.right;
             randomPoint = randomDirection * Random.Range(0, _rangeCollider.radius);
 
-        } while (Physics2D.OverlapCircle(randomPoint, _bodyCollision.radius, LayerMask.GetMask("Obstacles")) != null);
+        } while (Physics2D.OverlapCircle(randomPoint, _bodyCollisionRadius, LayerMask.GetMask("Obstacles")) != null);
 
         return randomPoint;
     }
@@ -291,7 +278,7 @@ public class EnemyFSMScript : MonoBehaviour
 
         // If there is an obstacle in the way
         if (Quaternion.Angle(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(_targetLocation.y, _targetLocation.x) * Mathf.Rad2Deg)) <  0.5f)
-            if (Physics2D.Raycast(transform.position, _body.right, _bodyCollision.radius * 2, LayerMask.GetMask("Obstacles")))
+            if (Physics2D.Raycast(transform.position, _body.right, _bodyCollisionRadius * 2, LayerMask.GetMask("Obstacles")))
                 _targetLocation = FindRandomDestination();
 
         // If the enemy is near the location
@@ -305,12 +292,6 @@ public class EnemyFSMScript : MonoBehaviour
         _body.transform.rotation = Quaternion.Lerp(_body.transform.rotation, Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg), _acceleration);
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position, transform.position + _body.right * _movementSpeed);
-
-        Gizmos.DrawWireSphere(_targetLocation, _bodyCollision.radius);
-    }
 
     private void ShootBullet()
     {
@@ -335,4 +316,10 @@ public class EnemyFSMScript : MonoBehaviour
 
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + _body.right * _movementSpeed);
+
+        Gizmos.DrawWireSphere(_targetLocation, _bodyCollisionRadius);
+    }
 }

@@ -377,8 +377,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5052674531828391206}
-  - component: {fileID: 480559573222469921}
-  - component: {fileID: 927197749194903456}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -405,55 +403,6 @@ Transform:
   - {fileID: 1141041391927321824}
   m_Father: {fileID: 7757632456791588862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &480559573222469921
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8048011399760049961}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1
---- !u!114 &927197749194903456
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8048011399760049961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1461484e5c0c77c4e8e64e1b3714b2b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHealth: 100
-  _currentHealth: 0
 --- !u!1 &8553650094152287982
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,7 +414,9 @@ GameObject:
   - component: {fileID: 7757632456791588862}
   - component: {fileID: 8513693423000356691}
   - component: {fileID: 2463124884805237052}
-  - component: {fileID: 1684595279542800731}
+  - component: {fileID: 388473822298710684}
+  - component: {fileID: 5379867327072061896}
+  - component: {fileID: 1448075487807205105}
   m_Layer: 0
   m_Name: EnemyAI
   m_TagString: Untagged
@@ -502,11 +453,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
-  _pathfindingAngleIncrement: 10
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 5379867327072061896}
   _body: {fileID: 5052674531828391206}
   _rangeCollider: {fileID: 2463124884805237052}
-  _bodyCollision: {fileID: 480559573222469921}
+  _pathfindingAngleIncrement: 10
+  _bodyCollisionRadius: 1
   _wanderTime: 5
   _movementSpeed: 5
   _acceleration: 0.2
@@ -553,7 +504,42 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 20
---- !u!50 &1684595279542800731
+--- !u!58 &388473822298710684
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8553650094152287982}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
+--- !u!50 &5379867327072061896
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -580,3 +566,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1448075487807205105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8553650094152287982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f1efcb5741849a4bac406df4a47d29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 100
+  _currentHealth: 0
+  _onDeath:
+    m_PersistentCalls:
+      m_Calls: []

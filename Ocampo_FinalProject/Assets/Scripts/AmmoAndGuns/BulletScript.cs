@@ -21,11 +21,16 @@ public class BulletScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Stops checking if it collides with other bullets
         if (collision.gameObject.GetComponent<BulletScript>() != null) return;
 
+        // Damages entities
         EntityStatsScript entity = collision.gameObject.GetComponent<EntityStatsScript>();
         if (entity != null)
+        {
+            Debug.Log(entity);
             entity.TakeDamage(Damage);
+        }
 
         Destroy(gameObject);
     }
