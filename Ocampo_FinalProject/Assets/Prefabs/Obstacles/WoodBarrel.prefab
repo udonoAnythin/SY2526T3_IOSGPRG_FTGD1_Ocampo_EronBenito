@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8768011216900672612}
   - component: {fileID: 8647759448652814470}
   - component: {fileID: 1667728482697911891}
+  - component: {fileID: 4989240284700678251}
   m_Layer: 0
   m_Name: WoodBarrel
   m_TagString: Untagged
@@ -98,11 +99,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d28d62e3d7ff3a48bafd6abb321c85d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: 2
+  _scaleDownValue: 0.9
   _ammoPrefabs:
   - {fileID: 1449713631837953182, guid: a357ca8ad70ccb748b9b145171e6b0a7, type: 3}
   - {fileID: 1333072868481151837, guid: d794f5e8addf2684daf59b4b436ffe40, type: 3}
   - {fileID: 3275419934107068731, guid: 466e063174415524b833082e7223699f, type: 3}
-  _bulletSpawnOffset: 10
+  - {fileID: 3275419934107068731, guid: 118749b48aa6b8844ab2103ca59be5b1, type: 3}
+  _bulletSpawnOffset: 1
   _maxBulletSpawnCount: 3
 --- !u!58 &1667728482697911891
 CircleCollider2D:
@@ -139,3 +143,30 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.71
+--- !u!50 &4989240284700678251
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770014324794531042}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

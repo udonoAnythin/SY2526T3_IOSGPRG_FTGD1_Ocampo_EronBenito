@@ -9,12 +9,11 @@ public class EnemyStatsScript : EntityStatsScript
     {
         base.Awake();
 
-        _onDeath.AddListener(OnDeath);
+        onDeath.AddListener(OnDeath);
     }
 
-    private void OnDeath()
+    protected virtual void OnDeath(EntityStatsScript victim, EntityStatsScript killer)
     {
-        Debug.Log("Enemy Died!");
         Destroy(gameObject);
     }
 

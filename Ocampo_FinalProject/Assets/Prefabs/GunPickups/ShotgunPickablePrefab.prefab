@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1693262283361656949}
   - component: {fileID: 7161028280414827153}
   - component: {fileID: 3052253778384556181}
-  - component: {fileID: 4311190460347523952}
+  - component: {fileID: 2072969835693871774}
   m_Layer: 0
   m_Name: ShotgunPickablePrefab
   m_TagString: Untagged
@@ -122,7 +122,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.73
---- !u!114 &4311190460347523952
+--- !u!114 &2072969835693871774
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 748969728291714981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6064f0067f09e6f49ba5df572dd94e49, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ecff57124dfa1741978775f66ed96df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _gunData: {fileID: 11400000, guid: bfe622aa3a3ff7b429a33e3f7f205021, type: 2}

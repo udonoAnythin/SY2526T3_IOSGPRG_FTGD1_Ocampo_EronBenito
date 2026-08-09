@@ -18,7 +18,7 @@ public class AmmoScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerGunScript player = collision.GetComponent<PlayerGunScript>();
+        PlayerShootScript player = collision.GetComponent<PlayerShootScript>();
 
         if (player != null)
         {

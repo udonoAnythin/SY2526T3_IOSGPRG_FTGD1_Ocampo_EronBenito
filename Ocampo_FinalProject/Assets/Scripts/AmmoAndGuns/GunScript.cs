@@ -10,18 +10,18 @@ public class GunScript : MonoBehaviour
     public GunData GunData
     { get => _gunData; }
 
-    [SerializeField] private GunData _gunData;
-    [SerializeField] private int _minLoadedBullets;
-    [SerializeField] private int _maxLoadedBullets;
+    [SerializeField] protected GunData _gunData;
+    [SerializeField] protected int _minLoadedBullets;
+    [SerializeField] protected int _maxLoadedBullets;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         SpawnGun();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerGunScript player = collision.GetComponent<PlayerGunScript>();
+        PlayerShootScript player = collision.GetComponent<PlayerShootScript>();
 
         if (player != null)
         {
@@ -30,7 +30,7 @@ public class GunScript : MonoBehaviour
         }
     }
 
-    private void SpawnGun()
+    protected virtual void SpawnGun()
     {
         // Instantiate a copy of the Gun Data
         _gunData = Instantiate(_gunData);

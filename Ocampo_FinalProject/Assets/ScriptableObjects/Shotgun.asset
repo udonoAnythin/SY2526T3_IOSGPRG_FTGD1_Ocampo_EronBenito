@@ -22,4 +22,4 @@ MonoBehaviour:
   _fireRate: 0.6
   _reloadSpeed: 2.7
   _shotgunArcAngle: 20
-  _bulletPrefab: {fileID: 1310088359403135848, guid: c03e694bd85b3ee468de787fa4aea539, type: 3}
+  _bulletPrefab: {fileID: 1310088359403135848, guid: 1a1696baee8fa95469de04e5aae02adb, type: 3}

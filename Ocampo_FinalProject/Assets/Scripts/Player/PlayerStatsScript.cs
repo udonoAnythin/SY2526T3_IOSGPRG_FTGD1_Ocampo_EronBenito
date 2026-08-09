@@ -6,28 +6,24 @@ using UnityEngine.UI;
 
 public class PlayerStatsScript : EntityStatsScript
 {
-    public static UnityEvent OnPlayerDeath
-    { get => _onPlayerDeath;  }
+    
 
     [Header("Health UI")]
     [SerializeField] private Image _healthMeter;
     [SerializeField] private Image _healthMeterDamaged;
 
-    [Header("References")]
-    [SerializeField] private Camera _camera;
-
-
-    private static UnityEvent _onPlayerDeath;
+    [Header("Camera References")]
+    [SerializeField] private float _camDamageShakeTimer = 0.3f;
+    [SerializeField] private float _camDamageShakeIntensity = 0.5f;
 
     protected override void Awake()
     {
         base.Awake();
 
-        // Assign the onDeath event to the static variable as a reference
-        _onPlayerDeath = _onDeath;
-
         // Add the active player death function to listen to the event
-        _onPlayerDeath.AddListener(ActivatePlayerDeath);
+        onDeath.AddListener(ActivatePlayerDeath);
+        onDamaged.AddListener(ShakeCameraOnDamage);
+
     }
 
     private void LateUpdate()
@@ -43,7 +39,7 @@ public class PlayerStatsScript : EntityStatsScript
         _healthMeterDamaged.fillAmount = Mathf.Lerp(_healthMeterDamaged.fillAmount, _healthMeter.fillAmount, 0.01f);
     }
 
-    private void ActivatePlayerDeath()
+    private void ActivatePlayerDeath(EntityStatsScript victim, EntityStatsScript killer)
     {
         // Adjust the Health UI one last time
         float newHealth = (float)_currentHealth / (float)_maxHealth;
@@ -51,9 +47,16 @@ public class PlayerStatsScript : EntityStatsScript
         _healthMeterDamaged.fillAmount = newHealth;
 
         // Remove Camera as a child
-        _camera.transform.SetParent(null, true);
+        CameraScript.instance.gameObject.transform.SetParent(null, true);
 
         // Delete player model
         Destroy(gameObject);
     }
+
+    private void ShakeCameraOnDamage()
+    {
+        if (_currentHealth > 0)
+            CameraScript.instance.ShakeCamera(_camDamageShakeTimer, _camDamageShakeIntensity);
+    }
+    
 }

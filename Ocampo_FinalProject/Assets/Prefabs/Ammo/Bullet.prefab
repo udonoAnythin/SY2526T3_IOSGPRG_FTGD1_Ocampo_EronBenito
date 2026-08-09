@@ -225,4 +225,7 @@ MonoBehaviour:
   _speed: 30
   _damage: 0
   _destroyTimer: 5
+  owner: {fileID: 0}
+  _entityHitParticles: {fileID: 641232801409638028, guid: acee9289958a26c4e8d11a4c907ca8dd, type: 3}
+  _obstacleHitParticles: {fileID: 6492018261121824904, guid: 2e1ab683aac1d9347afa3c1a2c04dd34, type: 3}
   _rb: {fileID: 8248574744300563181}

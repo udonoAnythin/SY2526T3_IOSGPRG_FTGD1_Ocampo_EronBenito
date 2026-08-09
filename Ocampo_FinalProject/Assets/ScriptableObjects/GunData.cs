@@ -6,7 +6,8 @@ public enum GunType
 {
     Pistol = 0,
     AutomaticRifle = 1,
-    Shotgun = 2
+    Shotgun = 2,
+    RocketLauncher = 3
 }
 
 public enum GunMode

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GunSelectionUIScript : MonoBehaviour
 {
 
-    [SerializeField] private PlayerGunScript _playerStats;
+    [SerializeField] private PlayerShootScript _playerShootScript;
 
     [SerializeField] private Color _unselected;
     [SerializeField] private Color _selected;
@@ -34,38 +34,38 @@ public class GunSelectionUIScript : MonoBehaviour
     {
         Debug.Log("Primary Selected");
 
-        _playerStats.SelectPrimaryGun();
+        _playerShootScript.SelectPrimaryGun();
     }
 
     public void BTN_SecondarySelect()
     {
         Debug.Log("Secondary Selected");
 
-        _playerStats.SelectSecondaryGun();
+        _playerShootScript.SelectSecondaryGun();
 
     }
 
     private void UpdateImageUI()
     {
-        if (_playerStats.Primary == null)
+        if (_playerShootScript.Primary == null)
             _primaryImage.enabled = false;
         else
         {
             _primaryImage.enabled = true;
-            _primaryImage.sprite = _playerStats.Primary.GunWorldSprite;
+            _primaryImage.sprite = _playerShootScript.Primary.GunWorldSprite;
         }
 
-        if (_playerStats.Secondary == null)
+        if (_playerShootScript.Secondary == null)
             _secondaryImage.enabled = false;
         else
         {
             _secondaryImage.enabled = true;
-            _secondaryImage.sprite = _playerStats.Secondary.GunWorldSprite;
+            _secondaryImage.sprite = _playerShootScript.Secondary.GunWorldSprite;
         }
 
-        if (_playerStats.HeldGun != null)
+        if (_playerShootScript.HeldGun != null)
         {
-            if (_playerStats.HeldGun == _playerStats.Primary)
+            if (_playerShootScript.HeldGun == _playerShootScript.Primary)
             {
                 _primaryButtonImage.color = _selected;
                 _secondaryButtonImage.color = _unselected;
@@ -76,7 +76,7 @@ public class GunSelectionUIScript : MonoBehaviour
                 _primaryText.color = Color.black;
                 _secondaryText.color = Color.white;
             }
-            else if (_playerStats.HeldGun == _playerStats.Secondary)
+            else if (_playerShootScript.HeldGun == _playerShootScript.Secondary)
             {
                 _secondaryButtonImage.color = _selected;
                 _primaryButtonImage.color = _unselected;
@@ -87,7 +87,7 @@ public class GunSelectionUIScript : MonoBehaviour
                 _secondaryText.color = Color.black;
                 _primaryText.color = Color.white;
 
-                _playerStats.SelectSecondaryGun();
+                _playerShootScript.SelectSecondaryGun();
             }
         }
 

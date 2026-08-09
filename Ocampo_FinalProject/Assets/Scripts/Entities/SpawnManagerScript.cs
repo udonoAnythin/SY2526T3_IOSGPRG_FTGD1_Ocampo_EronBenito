@@ -11,10 +11,17 @@ public class SpawnManagerScript : MonoBehaviour
 
     private void Start()
     {
-        _obstacleSpawner.SpawnObstacles();
-        _gunSpawner.SpawnAllGuns();
-        _ammoSpawner.SpawnAllBullets();
-        _enemySpawner.SpawnAllEnemies();
+        if (_obstacleSpawner != null)
+            _obstacleSpawner.SpawnObstacles();
+
+        if (_gunSpawner != null)
+            _gunSpawner.SpawnAllGuns();
+        
+        if (_ammoSpawner != null)
+            _ammoSpawner.SpawnAllBullets();
+
+        if (_enemySpawner != null)
+            _enemySpawner.SpawnAllEnemies();
     }
 
 }
