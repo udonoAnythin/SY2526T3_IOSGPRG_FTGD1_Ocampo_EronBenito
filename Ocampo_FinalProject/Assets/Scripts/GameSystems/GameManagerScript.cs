@@ -89,6 +89,11 @@ public class GameManagerScript : MonoBehaviour
         {
             _gameplayUI.SetActive(false);
             _victoryScreen.SetActive(true);
+
+            foreach (ParticleSystem particles in _victoryParticles)
+            {
+                particles.Play();
+            }
         }
     }
 
